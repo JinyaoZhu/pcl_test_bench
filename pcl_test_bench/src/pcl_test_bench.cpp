@@ -52,7 +52,7 @@ void showCloudsLeft(const PointCloud::Ptr cloud_target, const PointCloud::Ptr cl
 	//PCL_INFO("Press q to continue.\n");
 	//p_viz->spin();
 
-	p_viz->addCoordinateSystem(1.0);
+	//p_viz->addCoordinateSystem(0.1);
 	p_viz->initCameraParameters();
 
 	PCL_INFO("Press q to begin the registration.\n");
@@ -75,8 +75,7 @@ void showCloudsRight(const PointCloud::Ptr cloud_target, const PointCloud::Ptr c
 		p_viz->addPointCloud(cloud_source, src_h, "vp2_source", vp_2);
 	}
 
-	p_viz->addCoordinateSystem(1.0);
-	p_viz->initCameraParameters();
+	//p_viz->addCoordinateSystem(0.1);
 
 	PCL_INFO("Press q to continue.\n");
 	p_viz->spin();
