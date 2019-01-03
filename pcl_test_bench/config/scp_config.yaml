@@ -1,0 +1,32 @@
+
+# https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset_pcd_ascii/
+# src_pcd: ../data/bun03.pcd
+# target_pcd: ../data/bun4.pcd
+
+# src_pcd: pcd/water_bottle_1_1_1.pcd
+# target_pcd: pcd/water_bottle_1_1_47.pcd
+
+#src_pcd: pcd/marker_1_1_1.pcd
+#target_pcd: pcd/marker_1_1_47.pcd
+
+src_pcd: pcd/bun4.pcd
+target_pcd: pcd/bun03.pcd
+
+norm_est_RadiusSearch: 0.005
+fpfh_est_RadiusSearch: 0.05
+
+# Euclidian distance for inlier thresholding
+scp_max_corr_distance: 0.1
+# Maximum iterations number in RANSAC
+scp_max_iter: 10000
+# Similarity threshold for prerejector
+scp_sim_threshold: 0.6
+# Random sample first k nearest correspondences
+scp_corr_randomness: 3
+# Minimum inlier fraction
+scp_inlier_fraction: 0.05
+# Number of sample using for transformation estimation
+scp_number_of_samples: 3
+
+# Leaf size for grid filter
+grid_filter_leafsize: 0.005
