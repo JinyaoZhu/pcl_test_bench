@@ -1,0 +1,28 @@
+
+# https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset_pcd_ascii/
+# src_pcd: ../data/bun03.pcd
+# target_pcd: ../data/bun4.pcd
+
+# src_pcd: pcd/water_bottle_1_1_1.pcd
+# target_pcd: pcd/water_bottle_1_1_47.pcd
+
+# src_pcd: pcd/coffee_mug_1_1_1.pcd
+# target_pcd: pcd/coffee_mug_1_1_68.pcd
+
+# src_pcd: pcd/bun4.pcd
+# target_pcd: [
+#       pcd/bun01.pcd,
+#       pcd/bun03.pcd,
+#       ]
+
+
+pcd_files_path: 
+[               pcd/bun01.pcd,
+#---------------------------------------------
+                pcd/bun02.pcd,
+                pcd/bun03.pcd,
+                pcd/bun4.pcd,
+]
+
+# Leaf size for grid filter
+grid_filter_leafsize: 0.003

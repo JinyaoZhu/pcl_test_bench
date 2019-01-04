@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\pch.h" />
+    <ClInclude Include="inc\scp_test_bench.hpp" />
+    <ClInclude Include="inc\test_bench.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\pcl_test_bench.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -94,7 +96,7 @@
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\lib;C:\Program Files\PCL 1.8.1\lib;C:\Program Files\PCL 1.8.1\3rdParty\Boost\lib;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\lib;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\lib;C:\Program Files\PCL 1.8.1\3rdParty\VTK\lib;$(LibraryPath)</LibraryPath>
     <SourcePath>C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src;$(SourcePath)</SourcePath>
-    <IncludePath>C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\inc;C:\Program Files\PCL 1.8.1\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.1\3rdParty\Boost\include\boost-1_64;C:\Program Files\PCL 1.8.1\include\pcl-1.8;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.1\3rdParty\VTK\include\vtk-8.0;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\include;C:\Program Files\OpenNI2\Include;C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\inc\;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\PCL 1.8.1\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.1\3rdParty\Boost\include\boost-1_64;C:\Program Files\PCL 1.8.1\include\pcl-1.8;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.1\3rdParty\VTK\include\vtk-8.0;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\include;C:\Program Files\OpenNI2\Include;C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\inc\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,6 +159,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_SILENCE_FPOS_SEEKPOS_DEPRECATION_WARNING;BOOST_TYPEOF_EMULATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>
+      </LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

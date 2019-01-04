@@ -16,6 +16,7 @@
 
 // #include <boost/timer.hpp>
 #include <yaml-cpp/yaml.h>
+#include <test_bench.hpp>
 
 pcl::StopWatch timer;
 double duration;
