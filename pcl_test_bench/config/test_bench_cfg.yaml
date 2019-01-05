@@ -17,12 +17,16 @@
 
 
 pcd_files_path: 
-[               pcd/bun01.pcd,
+[               ref_data/trans_0.pcd,
 #---------------------------------------------
-                pcd/bun02.pcd,
-                pcd/bun03.pcd,
-                pcd/bun4.pcd,
+                ref_data/trans_1.pcd,
+                ref_data/trans_2.pcd,
+                ref_data/trans_3.pcd,
+                ref_data/trans_4.pcd,
+                ref_data/trans_5.pcd,
 ]
 
+ref_trans_path: ref_data/ref_trans.yaml
+
 # Leaf size for grid filter
-grid_filter_leafsize: 0.003
+grid_filter_leafsize: 0.005

@@ -13,13 +13,15 @@
 #include <pcl/registration/registration.h>
 #include <pcl/registration/sample_consensus_prerejective.h>
 
+#define ALGORITHM_NAME ("Sample Consensus Prerejective")
+
 template <typename PointType>
 class ScpTestBench : public TestBench<PointType> {
 
 public:
 	ScpTestBench():tree_ptr(new pcl::search::KdTree<PointType>()), is_first_loop(true)
 	{
-		TestBench<PointType>::reg_algorithm_name = std::string("SCP");
+		TestBench<PointType>::reg_algorithm_name = std::string(ALGORITHM_NAME);
 		norm_est.setSearchMethod(tree_ptr);
 		fpfh_est.setSearchMethod(tree_ptr);
 	}

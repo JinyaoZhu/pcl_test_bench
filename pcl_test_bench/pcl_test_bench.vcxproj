@@ -19,13 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\pch.h" />
+    <ClInclude Include="inc\ref_data_generator.hpp" />
     <ClInclude Include="inc\scp_test_bench.hpp" />
     <ClInclude Include="inc\test_bench.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
