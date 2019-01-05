@@ -15,18 +15,20 @@
 #       pcd/bun03.pcd,
 #       ]
 
+has_ref_transformation: true
 
 pcd_files_path: 
-[               ref_data/trans_0.pcd,
+[               ref/trans_0.pcd, #source point cloud
 #---------------------------------------------
-                ref_data/trans_1.pcd,
-                ref_data/trans_2.pcd,
-                ref_data/trans_3.pcd,
-                ref_data/trans_4.pcd,
-                ref_data/trans_5.pcd,
+                  ref/trans_1.pcd,
+                  ref/trans_2.pcd,
+                  ref/trans_3.pcd,             
+                  ref/trans_4.pcd,             
+                  ref/trans_5.pcd,             
+                     
 ]
 
-ref_trans_path: ref_data/ref_trans.yaml
+ref_trans_path: ref/ref_trans.yaml
 
 # Leaf size for grid filter
-grid_filter_leafsize: 0.005
+grid_filter_leafsize: 0.003

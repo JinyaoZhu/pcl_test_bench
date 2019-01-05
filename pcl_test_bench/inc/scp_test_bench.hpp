@@ -42,8 +42,8 @@ public:
 
 		scp_cfg = YAML::LoadFile(path);
 
-		norm_est_radius_search = scp_cfg["norm_est_RadiusSearch"].as<float>();
-		fpfh_est_radius_search = scp_cfg["fpfh_est_RadiusSearch"].as<float>();
+		norm_est_radius_search = scp_cfg["norm_est_radius_search"].as<float>();
+		fpfh_est_radius_search = scp_cfg["fpfh_est_radius_search"].as<float>();
 		scp_max_corr_distance = scp_cfg["scp_max_corr_distance"].as<float>();
 		scp_max_iter = scp_cfg["scp_max_iter"].as<int>();
 		scp_sim_threshold = scp_cfg["scp_sim_threshold"].as<float>();

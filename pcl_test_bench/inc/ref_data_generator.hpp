@@ -77,7 +77,7 @@ public:
 			transform.block<3, 1>(0, 3) = t;
 			transform(3, 3) = 1;
 			pcl::transformPointCloud(cloud_source, cloud_source_transformed, transform);
-			std::cout << "Generate " <<"T" << i << "=\n\n" << transform << std::endl;
+			std::cout << "Generate " <<"transformation" << i+1 << "=\n" << transform << "\n\n";
 
 			std::string node_name = "transformation_" + std::to_string(i + 1);
 			std::string pcd_name = output_path + "trans_" + std::to_string(i + 1) + ".pcd";
