@@ -13,24 +13,27 @@
 #include <pcl/registration/registration.h>
 #include <pcl/registration/sample_consensus_prerejective.h>
 
-#define ALGORITHM_NAME ("Sample Consensus Prerejective")
 
 template <typename PointType>
-class ScpTestBench : public TestBench<PointType> {
+class ScpTest : public TestBench<PointType> {
 
 public:
-	ScpTestBench():tree_ptr(new pcl::search::KdTree<PointType>()), is_first_loop(true)
+	ScpTest():alg_name("Sample Consensus Prerejective")
 	{
-		TestBench<PointType>::reg_algorithm_name = std::string(ALGORITHM_NAME);
+		is_first_loop = true;
+		typename pcl::search::KdTree<PointType>::Ptr tree_ptr = boost::make_shared<pcl::search::KdTree<PointType>>(kd_tree);
 		norm_est.setSearchMethod(tree_ptr);
 		fpfh_est.setSearchMethod(tree_ptr);
 	}
 
-	~ScpTestBench() {}
 
-	void loadScpConfig(std::string path) {
+	void loadCandidateConfig() {
 
-		YAML::Node scp_cfg;
+		YAML::Node alg_cfg;
+		TestBench<PointType>::reg_candidate_name = alg_name;
+		std::string path = TestBench<PointType>::cfg_file["scp_cfg_path"].as<std::string>();
+		alg_cfg = YAML::LoadFile(path);
+		
 		float norm_est_radius_search;
 		float fpfh_est_radius_search;
 		float scp_max_corr_distance;
@@ -40,16 +43,14 @@ public:
 		float scp_inlier_fraction;
 		int scp_number_of_samples;
 
-		scp_cfg = YAML::LoadFile(path);
-
-		norm_est_radius_search = scp_cfg["norm_est_radius_search"].as<float>();
-		fpfh_est_radius_search = scp_cfg["fpfh_est_radius_search"].as<float>();
-		scp_max_corr_distance = scp_cfg["scp_max_corr_distance"].as<float>();
-		scp_max_iter = scp_cfg["scp_max_iter"].as<int>();
-		scp_sim_threshold = scp_cfg["scp_sim_threshold"].as<float>();
-		scp_corr_randomness = scp_cfg["scp_corr_randomness"].as<int>();
-		scp_inlier_fraction = scp_cfg["scp_inlier_fraction"].as<float>();
-		scp_number_of_samples = scp_cfg["scp_number_of_samples"].as<int>();
+		norm_est_radius_search = alg_cfg["norm_est_radius_search"].as<float>();
+		fpfh_est_radius_search = alg_cfg["fpfh_est_radius_search"].as<float>();
+		scp_max_corr_distance = alg_cfg["scp_max_corr_distance"].as<float>();
+		scp_max_iter = alg_cfg["scp_max_iter"].as<int>();
+		scp_sim_threshold = alg_cfg["scp_sim_threshold"].as<float>();
+		scp_corr_randomness = alg_cfg["scp_corr_randomness"].as<int>();
+		scp_inlier_fraction = alg_cfg["scp_inlier_fraction"].as<float>();
+		scp_number_of_samples = alg_cfg["scp_number_of_samples"].as<int>();
 
 		pcl::console::print_info("Load SCP parameter: norm_est_radius_search = %f \n", norm_est_radius_search);
 		pcl::console::print_info("Load SCP parameter: fpfh_est_radius_search = %f \n", fpfh_est_radius_search);
@@ -110,6 +111,7 @@ public:
 	}
 
 private:
+	std::string alg_name;
 	bool is_first_loop;
 
 	pcl::SampleConsensusPrerejective<PointType, PointType, pcl::FPFHSignature33> scp_reg;
@@ -119,6 +121,5 @@ private:
 	pcl::PointCloud<pcl::Normal> norm_est_src, norm_est_tgt;
 	pcl::PointCloud<PointType> src_cloud;
 	pcl::PointCloud<PointType> tgt_cloud;
-	typename pcl::search::KdTree<PointType>::Ptr tree_ptr;
-
+	pcl::search::KdTree<PointType> kd_tree;
 };

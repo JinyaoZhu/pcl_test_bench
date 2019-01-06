@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <Eigen/Dense>
+#include <Eigen/Geometry>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
 
 namespace YAML {
 	template<>
@@ -34,13 +38,15 @@ public:
 	ReferenceDataGenerator() {};
 	~ReferenceDataGenerator() {};
 
-	void generatePointCloudWithRef(std::string pcd_path, std::string output_path, int num_pcd) {
+	bool generatePointCloudWithRef(std::string pcd_path, std::string output_path, int num_pcd) {
 
 		srand(time(NULL));
 
 		pcl::PointCloud<PointType> cloud_source;
 
-		pcl::io::loadPCDFile(pcd_path, cloud_source);
+		if (pcl::io::loadPCDFile(pcd_path, cloud_source) == -1) {
+			return false;
+		}
 
 		PointType centroid;
 		pcl::computeCentroid(cloud_source, centroid);
@@ -64,13 +70,23 @@ public:
 
 		YAML::Node ref_trans = YAML::Load("");
 
-		double max_translation = 0.2; // [m]
+		double max_translation; // [m]
+		double max_angle; // [deg]
+
+		std::cout << "Maximal translation(m): ";
+		std::cin >> max_translation;
+
+		std::cout << "Maximal rotation angle(deg): ";
+		std::cin >> max_angle;
 
 		pcl::io::savePCDFileASCII(output_path+"trans_0.pcd", cloud_source);
 
 		for (int i = 0; i < num_pcd; ++i) {
 			Eigen::Vector3f t = max_translation * Eigen::Vector3f::Random();
-			Eigen::Quaternionf q = Eigen::Quaternionf::UnitRandom();
+			Eigen::Vector3f euler = (M_PI/180)*max_angle * Eigen::Vector3f::Random();
+			Eigen::Quaternionf q(Eigen::AngleAxisf(euler(2), Eigen::Vector3f::UnitX())
+				* Eigen::AngleAxisf(euler(1), Eigen::Vector3f::UnitY())
+				* Eigen::AngleAxisf(euler(0), Eigen::Vector3f::UnitZ()));
 			pcl::PointCloud<PointType> cloud_source_transformed;
 			Eigen::Matrix4f transform;
 			transform.block<3, 3>(0, 0) = q.toRotationMatrix();
@@ -88,5 +104,7 @@ public:
 
 		fout << ref_trans;
 		fout.close();
+
+		return true;
 	}
 };

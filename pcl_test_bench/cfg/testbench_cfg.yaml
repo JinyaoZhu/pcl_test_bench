@@ -14,6 +14,8 @@
 #       pcd/bun01.pcd,
 #       pcd/bun03.pcd,
 #       ]
+scp_cfg_path: cfg/scp_cfg.yaml
+icp_cfg_path: cfg/icp_cfg.yaml
 
 has_ref_transformation: true
 
@@ -27,6 +29,8 @@ pcd_files_path:
                   ref/trans_5.pcd,             
                      
 ]
+
+# pcd_files_path: [pcd/coffee_mug_1_1_1.pcd, pcd/coffee_mug_1_1_68.pcd]
 
 ref_trans_path: ref/ref_trans.yaml
 
