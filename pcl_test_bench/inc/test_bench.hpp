@@ -65,7 +65,7 @@ public:
 	*
 	*/
 	bool isVizStopped() {
-		return visualizer.wasStopped();
+		return visualizer_ptr->wasStopped();
 	}
 
 	/**
@@ -73,14 +73,14 @@ public:
 	*
 	*/
 	void runTestBench() {
-		vizInit();
 		preprocessPointCloud();
+		vizInit();
 		vizSrcTgt<PointType>();
 		doAlignAll();
 		computeResult();
 		pcl::console::print_info("\n[TESTBENCH] Press q to quit.\n");
-		visualizer.spin();
-		visualizer.close();
+		visualizer_ptr->spin();
+		visualizer_ptr->close();
 	}
 
 
@@ -118,7 +118,7 @@ private:
 	double grid_filter_leafsize;
 	bool has_ref_transformation;
 
-	pcl::visualization::PCLVisualizer visualizer;
+	boost::shared_ptr<pcl::visualization::PCLVisualizer> visualizer_ptr;
 	int view_port_1, view_port_2;
 	std::vector<vtkSmartPointer<vtkDataArray>> clouds_tgt_color;
 	bool is_viz_result_first_loop = true;
@@ -311,40 +311,40 @@ private:
 	template <>
 	void vizSrcTgt<pcl::PointXYZ>() {
 		pcl::visualization::PointCloudColorHandlerCustom<PointType> src_h(cloud_src_ptr, 255, 0, 0);
-		visualizer.addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
+		visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
 
 		int idx = 0;
 		for (auto& pcd_ptr : clouds_tgt_ptr) {
 			pcl::visualization::PointCloudColorHandlerCustom<PointType> tgt_h(pcd_ptr, 255 * rand(), 255 * rand(), 255 * rand());
-			visualizer.addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
+			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 			clouds_tgt_color.emplace_back();
 			tgt_h.getColor(clouds_tgt_color.back());
 		}
 
-		visualizer.initCameraParameters();
+		visualizer_ptr->initCameraParameters();
 
 		pcl::console::print_info("\n[TESTBENCH] Press q to begin the registration.\n");
 		vizResultAddOne<PointType>(nullptr, 0); // show source in right
-		visualizer.spin();
+		visualizer_ptr->spin();
 	}
 
 	template <>
 	void vizSrcTgt<pcl::PointXYZRGB>() {
 
 		pcl::visualization::PointCloudColorHandlerRGBField<PointType> src_h(cloud_src_ptr);
-		visualizer.addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
+		visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
 
 		int idx = 0;
 		for (auto& pcd_ptr : clouds_tgt_ptr) {
 			pcl::visualization::PointCloudColorHandlerRGBField<PointType> tgt_h(pcd_ptr);
-			visualizer.addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
+			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 		}
 
-		visualizer.initCameraParameters();
+		visualizer_ptr->initCameraParameters();
 
 		pcl::console::print_info("\n[TESTBENCH] Press q to begin the registration.\n");
 		vizResultAddOne<PointType>(nullptr, 0); // show source in right
-		visualizer.spin();
+		visualizer_ptr->spin();
 	}
 
 	template <>
@@ -352,12 +352,12 @@ private:
 
 		if (is_viz_result_first_loop) {
 			pcl::visualization::PointCloudColorHandlerCustom<PointType> src_h(cloud_src_ptr, 255, 0, 0);
-			visualizer.addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
+			visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
 			is_viz_result_first_loop = false;
 		}
 
 		if (tgt_ptr == nullptr) {
-			visualizer.spinOnce();
+			visualizer_ptr->spinOnce();
 			return;
 		}
 
@@ -367,9 +367,9 @@ private:
 
 		pcl::visualization::PointCloudColorHandlerCustom<PointType> tgt_h(tgt_ptr, r, g, b);
 
-		visualizer.addPointCloud(tgt_ptr, tgt_h, "vp2_target" + std::to_string(tgt_idx), view_port_2);
+		visualizer_ptr->addPointCloud(tgt_ptr, tgt_h, "vp2_target" + std::to_string(tgt_idx), view_port_2);
 
-		visualizer.spinOnce();
+		visualizer_ptr->spinOnce();
 	}
 
 	template <>
@@ -377,20 +377,20 @@ private:
 
 		if (is_viz_result_first_loop) {
 			pcl::visualization::PointCloudColorHandlerRGBField<PointType> src_h(cloud_src_ptr);
-			visualizer.addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
+			visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
 			is_viz_result_first_loop = false;
 		}
 
 		if (tgt_ptr == nullptr) {
-			visualizer.spinOnce();
+			visualizer_ptr->spinOnce();
 			return;
 		}
 
 		pcl::visualization::PointCloudColorHandlerRGBField<PointType> tgt_h(tgt_ptr);
 
-		visualizer.addPointCloud(tgt_ptr, tgt_h, "vp2_target" + std::to_string(tgt_idx), view_port_2);
+		visualizer_ptr->addPointCloud(tgt_ptr, tgt_h, "vp2_target" + std::to_string(tgt_idx), view_port_2);
 
-		visualizer.spinOnce();
+		visualizer_ptr->spinOnce();
 	}
 
 
@@ -401,9 +401,11 @@ private:
 
 
 	void vizInit() {
-		visualizer.setWindowName("TestBench");
-		visualizer.createViewPort(0.0, 0, 0.5, 1.0, view_port_1);
-		visualizer.createViewPort(0.5, 0, 1.0, 1.0, view_port_2);
+
+		visualizer_ptr = boost::make_shared<pcl::visualization::PCLVisualizer>(*(new pcl::visualization::PCLVisualizer));
+		visualizer_ptr->setWindowName("TestBench");
+		visualizer_ptr->createViewPort(0.0, 0, 0.5, 1.0, view_port_1);
+		visualizer_ptr->createViewPort(0.5, 0, 1.0, 1.0, view_port_2);
 	}
 
 
