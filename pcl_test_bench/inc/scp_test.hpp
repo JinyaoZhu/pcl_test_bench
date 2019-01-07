@@ -8,10 +8,12 @@
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/kdtree/impl/kdtree_flann.hpp>
-#include <pcl/features/normal_3d.h>
-#include <pcl/features/fpfh.h>
+#include <pcl/search/brute_force.h>
+#include <pcl/features/normal_3d_omp.h>
+#include <pcl/features/fpfh_omp.h>
 #include <pcl/registration/registration.h>
 #include <pcl/registration/sample_consensus_prerejective.h>
+#include <pcl/common/time.h>
 
 
 template <typename PointType>
@@ -22,6 +24,7 @@ public:
 	{
 		is_first_loop = true;
 		typename pcl::search::KdTree<PointType>::Ptr tree_ptr = boost::make_shared<pcl::search::KdTree<PointType>>(kd_tree);
+		//typename pcl::search::BruteForce< PointType >::Ptr tree_ptr(new pcl::search::BruteForce< PointType >);
 		norm_est.setSearchMethod(tree_ptr);
 		fpfh_est.setSearchMethod(tree_ptr);
 	}
@@ -96,7 +99,9 @@ public:
 
 		fpfh_est.setInputCloud(tgt_cloud_ptr);
 		fpfh_est.setInputNormals(norm_est_tgt.makeShared());
+		//stop_watch.reset();
 		fpfh_est.compute(features_tgt);
+		//pcl::console::print_info("FPFH compute time: %.5f (s)\n", stop_watch.getTimeSeconds());
 
 		scp_reg.setInputSource(src_cloud_ptr);
 		scp_reg.setInputTarget(tgt_cloud_ptr);
@@ -115,11 +120,13 @@ private:
 	bool is_first_loop;
 
 	pcl::SampleConsensusPrerejective<PointType, PointType, pcl::FPFHSignature33> scp_reg;
-	pcl::FPFHEstimation<PointType, pcl::Normal, pcl::FPFHSignature33> fpfh_est;
-	pcl::NormalEstimation<PointType, pcl::Normal> norm_est;
+	pcl::FPFHEstimationOMP<PointType, pcl::Normal, pcl::FPFHSignature33> fpfh_est;
+	pcl::NormalEstimationOMP<PointType, pcl::Normal> norm_est;
 	pcl::PointCloud<pcl::FPFHSignature33> features_src, features_tgt;
 	pcl::PointCloud<pcl::Normal> norm_est_src, norm_est_tgt;
 	pcl::PointCloud<PointType> src_cloud;
 	pcl::PointCloud<PointType> tgt_cloud;
 	pcl::search::KdTree<PointType> kd_tree;
+
+	pcl::StopWatch stop_watch;
 };

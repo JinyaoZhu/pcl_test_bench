@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include <ref_data_generator.hpp>
 #include <conio.h>
+#include <ref_data_generator.hpp>
 
 #include <scp_test.hpp>
 #include <icp_test.hpp>
@@ -39,8 +39,7 @@ int main(int argc, char **argv)
 			std::cout << "Number of transformations: ";
 			std::cin >> num_trans;
 			ReferenceDataGenerator<PointType> data_gen;
-			if(data_gen.generatePointCloudWithRef(src_cloud_path, output_path, num_trans))
-			    is_finished = true;
+			data_gen.generatePointCloudWithRef(src_cloud_path, output_path, num_trans);
 		}
 		else if (user_input == "2") {
 			ScpTest<PointType> test_bench = ScpTest<PointType>();

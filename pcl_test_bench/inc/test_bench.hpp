@@ -1,3 +1,8 @@
+/**
+ * Test Bench framework for PCL registration algorithm
+ * Author: J.Zhu
+ * Date: 2017.1.7
+ */
 #pragma once
 #include <iostream>
 #include <vector>
@@ -11,30 +16,30 @@
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/common/time.h>
 #include <Eigen/Dense>
-#include <Eigen/Geometry> 
+#include <Eigen/Geometry>
 
 template <typename PointType>
-class TestBench{
-
-public:
-
+class TestBench
+{
+  public:
 	typedef boost::shared_ptr<TestBench<PointType>> Ptr;
-	/**
-	* @brief
-	*
-	*/
-	TestBench() {
-		pcl::console::print_info("[TESTBENCH] Create new Test Bench.\n");
-	}
 
 	inline Ptr
 	makeShared() const { return Ptr(this); }
 
 	/**
-	* @brief
-	*
+	* \brief constructor indicate new class
 	*/
-	void loadTestBenchConfig(const std::string path) {
+	TestBench()
+	{
+		pcl::console::print_info("[TESTBENCH] Create new Test Bench.\n");
+	}
+
+	/**
+	 * \brief load all configuration for the test bench and the candidate/tester
+	 */
+	void loadTestBenchConfig(const std::string path)
+	{
 		cfg_file_path = path;
 		cfg_file = YAML::LoadFile(path);
 		grid_filter_leafsize = cfg_file["grid_filter_leafsize"].as<float>();
@@ -44,35 +49,24 @@ public:
 		pcl::console::print_info("[TESTBENCH] Load parameters: grid_filter_leafsize = %f\n", grid_filter_leafsize);
 		loadSrcFromPCDFile(pcd_file_paths.front());
 		loadTgtFromPCDFile(std::vector<std::string>(pcd_file_paths.begin() + 1, pcd_file_paths.end()));
-		if(has_ref_transformation)
+		if (has_ref_transformation)
 			loadRefTransformation(ref_trans_path);
 		loadCandidateConfig();
 	}
 
-
-	virtual void loadCandidateConfig()=0 {}
-
 	/**
-	* @brief
-	*
-	*/
-	virtual bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
-		                     pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f& transform) = 0;
-
-
-	/**
-	* @brief
-	*
-	*/
-	bool isVizStopped() {
+	 * \brief if viewer is stoppped
+	 */
+	bool isVizStopped()
+	{
 		return visualizer_ptr->wasStopped();
 	}
 
 	/**
-	* @brief
-	*
-	*/
-	void runTestBench() {
+	 * \brief run the test bench
+	 */
+	void runTestBench()
+	{
 		preprocessPointCloud();
 		vizInit();
 		vizSrcTgt<PointType>();
@@ -83,8 +77,16 @@ public:
 		visualizer_ptr->close();
 	}
 
+	// TODO:
+	/**
+	* \brief save all test results
+	*/
+	void saveResults() 
+	{
 
-protected:
+	}
+
+  protected:
 	YAML::Node cfg_file;
 	std::string reg_candidate_name;
 
@@ -97,8 +99,22 @@ protected:
 	std::vector<pcl::PointCloud<PointType>> clouds_reg;
 	std::vector<boost::shared_ptr<pcl::PointCloud<PointType>>> clouds_reg_ptr;
 
-private:
-	typedef struct {
+	/**
+	 * \brief load config for candidate, must be define by user(registration algorithm)
+	 */
+	virtual void loadCandidateConfig() = 0 {}
+
+	/**
+	 * \brief do registration for A pair of point cloud, must be defined by user
+	 * \input source and target point cloud
+	 * \return aligned point cloud and estimated transformation
+	 */
+	virtual bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
+							 pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f &transform) = 0;
+
+  private:
+	typedef struct
+	{
 		bool is_converged = false;
 		std::string pcd_file;
 		boost::shared_ptr<pcl::PointCloud<PointType>> cloud_reg_ptr;
@@ -123,17 +139,14 @@ private:
 	std::vector<vtkSmartPointer<vtkDataArray>> clouds_tgt_color;
 	bool is_viz_result_first_loop = true;
 
-
-	std::vector<Result> results;
+	std::vector<Result> results; // all registration result
 	pcl::StopWatch stop_watch;
 
-	/**
-	* @brief
-	*
-	*/
-	void loadSrcFromPCDFile(const std::string &pcd_path) {
+	void loadSrcFromPCDFile(const std::string &pcd_path)
+	{
 		pcl::PointCloud<PointType> pcd;
-		if (pcl::io::loadPCDFile(pcd_path, pcd) == -1) {
+		if (pcl::io::loadPCDFile(pcd_path, pcd) == -1)
+		{
 			pcl::console::print_error("[TESTBENCH] Error loading PCD file, please check config file.\n");
 			stopProcess();
 		}
@@ -143,14 +156,13 @@ private:
 		pcl::console::print_info("[TESTBENCH] Load source point cloud: %s, size: %d\n", pcd_path.c_str(), pcd.size());
 	}
 
-	/**
-	* @brief
-	*
-	*/
-	void loadTgtFromPCDFile(const std::vector<std::string> &pcd_paths) {
-		for (auto &path : pcd_paths) {
+	void loadTgtFromPCDFile(const std::vector<std::string> &pcd_paths)
+	{
+		for (auto &path : pcd_paths)
+		{
 			pcl::PointCloud<PointType> pcd;
-			if (pcl::io::loadPCDFile(path, pcd) == -1) {
+			if (pcl::io::loadPCDFile(path, pcd) == -1)
+			{
 				pcl::console::print_error("[TESTBENCH] Error loading PCD file, please check config file.\n");
 				stopProcess();
 			}
@@ -163,23 +175,23 @@ private:
 		}
 	}
 
-	/**
-	* @brief
-	*
-	*/
-	void loadRefTransformation(std::string path) {
+	void loadRefTransformation(std::string path)
+	{
 		std::ifstream fin(path);
 		YAML::Node doc = YAML::Load(fin);
-		std::cout << "[TESTBENCH] Loading reference transformations ..." << "\n";
-		if (doc.size() != clouds_tgt.size()) {
+		std::cout << "[TESTBENCH] Loading reference transformations ..."
+				  << "\n";
+		if (doc.size() != clouds_tgt.size())
+		{
 			pcl::console::print_error(
-			"[TESTBENCH] reference transformations size not equal to target pointclouds size. (%d != %d)\n",
+				"[TESTBENCH] reference transformations size not equal to target pointclouds size. (%d != %d)\n",
 				doc.size(), clouds_tgt.size());
 			stopProcess();
 		}
 
 		int idx = 0;
-		for (YAML::const_iterator it = doc.begin(); it != doc.end(); ++it, ++idx) {
+		for (YAML::const_iterator it = doc.begin(); it != doc.end(); ++it, ++idx)
+		{
 			Eigen::Matrix4f ref_transformation = it->second.as<Eigen::Matrix4f>();
 			results[idx].ref_transformation = ref_transformation;
 			//std::cout << "[TESTBENCH] Reference transformation " << std::to_string(idx+1) << "\n";
@@ -188,29 +200,20 @@ private:
 		fin.close();
 	}
 
-	/**
-	* @brief
-	*
-	*/
-	void setSrcPointCloud(const pcl::PointCloud<PointType> &pcd) {
+	void setSrcPointCloud(const pcl::PointCloud<PointType> &pcd)
+	{
 		cloud_src = pcd;
 		cloud_src_ptr = cloud_src.makeShared();
 	}
 
-	/**
-	* @brief 
-	*
-	*/
-	void addTgtPointCloud(const pcl::PointCloud<PointType> &pcd) {
+	void addTgtPointCloud(const pcl::PointCloud<PointType> &pcd)
+	{
 		clouds_tgt.push_back(pcd);
 		clouds_tgt_ptr.push_back(clouds_tgt.back().makeShared());
 	}
 
-	/**
-* @brief
-*
-*/
-	void preprocessPointCloud() {
+	void preprocessPointCloud()
+	{
 		pcl::VoxelGrid<PointType> grid;
 		grid.setLeafSize(grid_filter_leafsize, grid_filter_leafsize, grid_filter_leafsize);
 
@@ -218,25 +221,24 @@ private:
 		grid.filter(cloud_src_filtered);
 		cloud_src_filtered_ptr = cloud_src_filtered.makeShared();
 		pcl::console::print_info("[TESTBENCH] Filtered source point cloud size: %d / %d\n",
-			cloud_src_filtered.size(), cloud_src.size());
+								 cloud_src_filtered.size(), cloud_src.size());
 
-		for (auto &cloud_ptr : clouds_tgt_ptr) {
+		for (auto &cloud_ptr : clouds_tgt_ptr)
+		{
 			grid.setInputCloud(cloud_ptr);
 			clouds_tgt_filtered.emplace_back();
 			grid.filter(clouds_tgt_filtered.back());
 			clouds_tgt_filtered_ptr.push_back(clouds_tgt_filtered.back().makeShared());
 			pcl::console::print_info("[TESTBENCH] Filtered target point cloud size: %d / %d\n",
-				clouds_tgt_filtered.back().size(), cloud_ptr->size());
+									 clouds_tgt_filtered.back().size(), cloud_ptr->size());
 		}
 	}
 
-	/**
-	* @brief
-	*
-	*/
-	void computeResult() {
+	void computeResult()
+	{
 		pcl::console::print_info("\n[TESTBENCH] Algorithm: %s \n", reg_candidate_name.c_str());
-		for (int i = 0; i < results.size(); ++i) {
+		for (int i = 0; i < results.size(); ++i)
+		{
 			Result &result = results[i];
 			Eigen::Matrix4f final_transformation = result.final_transformation;
 			Eigen::Matrix4f ref_transformation = result.ref_transformation;
@@ -257,7 +259,8 @@ private:
 			pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", T(2, 0), T(2, 1), T(2, 2));
 			pcl::console::print_info("t = [ %0.3f, %0.3f, %0.3f ]\n", T(0, 3), T(1, 3), T(2, 3));
 			//pcl::console::print_info("Error euler: [ %6.3f, %6.3f, %6.3f ] (deg)\n", error_euler(0), error_euler(1), error_euler(2));
-			if (has_ref_transformation) {
+			if (has_ref_transformation)
+			{
 				if (abs(error_q.w()) > 0.99)
 					pcl::console::print_info("Error quaternion: [ x: %4.3f, y: %4.3f, z: %4.3f, w: %4.3f ]\n", error_q.x(), error_q.y(), error_q.z(), error_q.w());
 				else
@@ -281,8 +284,10 @@ private:
 		}
 	}
 
-	void warpErrorEuler(Eigen::Vector3f& euler) {
-		for (int i = 0; i < 3; ++i) {
+	void warpErrorEuler(Eigen::Vector3f &euler)
+	{
+		for (int i = 0; i < 3; ++i)
+		{
 			while (euler(i) > M_PI)
 				euler(i) -= 2 * M_PI;
 			while (euler(i) < -M_PI)
@@ -290,31 +295,24 @@ private:
 		}
 	}
 
-	template<typename T>
-	void vizSrcTgt() {
-
-	};
-
-	template<typename T>
-	void vizResult() {
-
-	};
+	template <typename T>
+	void vizSrcTgt() {}
 
 	template <typename T>
-	void vizResultAddOne(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx) {
-	};
+	void vizResult() {}
 
-	/**
-	* @brief
-	*
-	*/
+	template <typename T>
+	void vizResultAddOne(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx){};
+
 	template <>
-	void vizSrcTgt<pcl::PointXYZ>() {
+	void vizSrcTgt<pcl::PointXYZ>()
+	{
 		pcl::visualization::PointCloudColorHandlerCustom<PointType> src_h(cloud_src_ptr, 255, 0, 0);
 		visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
 
 		int idx = 0;
-		for (auto& pcd_ptr : clouds_tgt_ptr) {
+		for (auto &pcd_ptr : clouds_tgt_ptr)
+		{
 			pcl::visualization::PointCloudColorHandlerCustom<PointType> tgt_h(pcd_ptr, 255 * rand(), 255 * rand(), 255 * rand());
 			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 			clouds_tgt_color.emplace_back();
@@ -329,13 +327,14 @@ private:
 	}
 
 	template <>
-	void vizSrcTgt<pcl::PointXYZRGB>() {
-
+	void vizSrcTgt<pcl::PointXYZRGB>()
+	{
 		pcl::visualization::PointCloudColorHandlerRGBField<PointType> src_h(cloud_src_ptr);
 		visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
 
 		int idx = 0;
-		for (auto& pcd_ptr : clouds_tgt_ptr) {
+		for (auto &pcd_ptr : clouds_tgt_ptr)
+		{
 			pcl::visualization::PointCloudColorHandlerRGBField<PointType> tgt_h(pcd_ptr);
 			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 		}
@@ -348,15 +347,17 @@ private:
 	}
 
 	template <>
-	void vizResultAddOne<pcl::PointXYZ>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx) {
-
-		if (is_viz_result_first_loop) {
+	void vizResultAddOne<pcl::PointXYZ>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx)
+	{
+		if (is_viz_result_first_loop)
+		{
 			pcl::visualization::PointCloudColorHandlerCustom<PointType> src_h(cloud_src_ptr, 255, 0, 0);
 			visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
 			is_viz_result_first_loop = false;
 		}
 
-		if (tgt_ptr == nullptr) {
+		if (tgt_ptr == nullptr)
+		{
 			visualizer_ptr->spinOnce();
 			return;
 		}
@@ -373,15 +374,18 @@ private:
 	}
 
 	template <>
-	void vizResultAddOne<pcl::PointXYZRGB>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx) {
+	void vizResultAddOne<pcl::PointXYZRGB>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx)
+	{
 
-		if (is_viz_result_first_loop) {
+		if (is_viz_result_first_loop)
+		{
 			pcl::visualization::PointCloudColorHandlerRGBField<PointType> src_h(cloud_src_ptr);
 			visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
 			is_viz_result_first_loop = false;
 		}
 
-		if (tgt_ptr == nullptr) {
+		if (tgt_ptr == nullptr)
+		{
 			visualizer_ptr->spinOnce();
 			return;
 		}
@@ -393,39 +397,37 @@ private:
 		visualizer_ptr->spinOnce();
 	}
 
-
-	void stopProcess() {
+	void stopProcess()
+	{
 		pcl::console::print_error("Please close window.\n");
-		for (;;);
+		for (;;)
+			;
 	}
 
-
-	void vizInit() {
-
+	void vizInit()
+	{
 		visualizer_ptr = boost::make_shared<pcl::visualization::PCLVisualizer>(*(new pcl::visualization::PCLVisualizer));
 		visualizer_ptr->setWindowName("TestBench");
 		visualizer_ptr->createViewPort(0.0, 0, 0.5, 1.0, view_port_1);
 		visualizer_ptr->createViewPort(0.5, 0, 1.0, 1.0, view_port_2);
 	}
 
-
-	/**
-* @brief
-*
-*/
-	void doAlignAll() {
+	void doAlignAll()
+	{
 		pcl::PointCloud<PointType> reg_cloud, reg_cloud_filtered;
 		Eigen::Matrix4f final_transform;
 		pcl::console::print_info("[TESTBENCH] Start registration...\n");
-		for (int i = 0; i < clouds_tgt_filtered.size(); ++i) {
+		for (int i = 0; i < clouds_tgt_filtered.size(); ++i)
+		{
 			pcl::console::print_info("[TESTBENCH] Registration %d start...\n", i + 1);
 
 			stop_watch.reset();
 			bool is_converged = doAlignOnce(cloud_src_filtered, clouds_tgt_filtered[i], reg_cloud_filtered, final_transform);
 			double time_cost = stop_watch.getTimeSeconds();
 
-			if (!is_converged) {
-				pcl::console::print_warn("[TESTBENCH] Result not converge, target point cloud %d from %s\n", i + 1, pcd_file_paths[i+1].c_str());
+			if (!is_converged)
+			{
+				pcl::console::print_warn("[TESTBENCH] Result not converge, target point cloud %d from %s\n", i + 1, pcd_file_paths[i + 1].c_str());
 			}
 			pcl::transformPointCloud(clouds_tgt[i], reg_cloud, final_transform.inverse());
 			clouds_reg.push_back(reg_cloud);
@@ -438,8 +440,7 @@ private:
 			results[i].point_size_tgt = clouds_tgt_filtered[i].size();
 
 			vizResultAddOne<PointType>(clouds_reg_ptr.back(), i);
-			pcl::console::print_info("[TESTBENCH] Registration %d finished, time cost: %.4f[s]\n", i + 1, time_cost);
+			pcl::console::print_highlight("[TESTBENCH] Registration %d finished, time cost: %.4f[s]\n", i + 1, time_cost);
 		}
 	}
 };
-

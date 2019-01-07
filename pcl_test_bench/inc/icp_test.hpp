@@ -25,6 +25,8 @@ public:
 		TestBench<PointType>::reg_candidate_name = alg_name;
 		std::string path = TestBench<PointType>::cfg_file["icp_cfg_path"].as<std::string>();
 		alg_cfg = YAML::LoadFile(path);
+		icp_max_iter = alg_cfg["icp_max_iter"].as<int>();
+		icp.setMaximumIterations(icp_max_iter);
 	}
 
 	bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
@@ -33,7 +35,7 @@ public:
 		typename pcl::PointCloud<PointType>::Ptr src_cloud_ptr = src_cloud.makeShared();
 		typename pcl::PointCloud<PointType>::Ptr tgt_cloud_ptr = tgt_cloud.makeShared();
 
-		pcl::IterativeClosestPoint<PointType, PointType> icp;
+		
 		icp.setInputSource(src_cloud_ptr);
 		icp.setInputTarget(tgt_cloud_ptr);
 		icp.align(reg_cloud);
@@ -44,6 +46,8 @@ public:
 	}
 
 private:
+	int icp_max_iter;
+	pcl::IterativeClosestPoint<PointType, PointType> icp;
 	std::string alg_name;
 
 };
