@@ -26,12 +26,12 @@ pcd_files_path:
                   ref/trans_2.pcd,
                   ref/trans_3.pcd,             
                   ref/trans_4.pcd,             
-                  ref/trans_5.pcd,             
+                  ref/trans_5.pcd,
                   ref/trans_6.pcd,
                   ref/trans_7.pcd,
                   ref/trans_8.pcd,             
                   ref/trans_9.pcd,             
-                  ref/trans_10.pcd,  
+                  ref/trans_10.pcd,
 ]
 
 # pcd_files_path: [chef.pcd, rs1.pcd]
@@ -39,4 +39,4 @@ pcd_files_path:
 ref_trans_path: ref/ref_trans.yaml
 
 # Leaf size for grid filter
-grid_filter_leafsize: 0.015
+grid_filter_leafsize: 0.005

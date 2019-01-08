@@ -1,9 +1,9 @@
 
-norm_est_radius_search: 0.05
-fpfh_est_radius_search: 0.08
+norm_est_radius_search: 0.01
+fpfh_est_radius_search: 0.02
 
 # Euclidian distance for inlier thresholding ~2.5x leaf size
-scp_max_corr_distance: 0.05
+scp_max_corr_distance: 0.01
 # Maximum iterations number in RANSAC
 scp_max_iter: 10000
 # Similarity threshold for prerejector

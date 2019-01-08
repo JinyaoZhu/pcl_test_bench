@@ -296,24 +296,15 @@ class TestBench
 	}
 
 	template <typename T>
-	void vizSrcTgt() {}
-
-	template <typename T>
-	void vizResult() {}
-
-	template <typename T>
-	void vizResultAddOne(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx){};
-
-	template <>
-	void vizSrcTgt<pcl::PointXYZ>()
-	{
-		pcl::visualization::PointCloudColorHandlerCustom<PointType> src_h(cloud_src_ptr, 255, 0, 0);
+	void vizSrcTgt() {
+		pcl::visualization::PointCloudColorHandlerCustom<T> src_h(cloud_src_ptr, 255, 0, 0);
 		visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
 
 		int idx = 0;
 		for (auto &pcd_ptr : clouds_tgt_ptr)
 		{
-			pcl::visualization::PointCloudColorHandlerCustom<PointType> tgt_h(pcd_ptr, 255 * rand(), 255 * rand(), 255 * rand());
+			pcl::visualization::PointCloudColorHandlerCustom<T> tgt_h(pcd_ptr, 
+				255 * (rand()/(RAND_MAX+1.0)), 255 * (rand() / (RAND_MAX + 1.0)), 255 * (rand() / (RAND_MAX + 1.0)));
 			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 			clouds_tgt_color.emplace_back();
 			tgt_h.getColor(clouds_tgt_color.back());
@@ -322,36 +313,36 @@ class TestBench
 		visualizer_ptr->initCameraParameters();
 
 		pcl::console::print_info("\n[TESTBENCH] Press q to begin the registration.\n");
-		vizResultAddOne<PointType>(nullptr, 0); // show source in right
+		vizResultAddOne<T>(nullptr, 0); // show source in right
 		visualizer_ptr->spin();
 	}
+
 
 	template <>
 	void vizSrcTgt<pcl::PointXYZRGB>()
 	{
-		pcl::visualization::PointCloudColorHandlerRGBField<PointType> src_h(cloud_src_ptr);
+		pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> src_h(cloud_src_ptr);
 		visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp1_source", view_port_1);
 
 		int idx = 0;
 		for (auto &pcd_ptr : clouds_tgt_ptr)
 		{
-			pcl::visualization::PointCloudColorHandlerRGBField<PointType> tgt_h(pcd_ptr);
+			pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> tgt_h(pcd_ptr);
 			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 		}
 
 		visualizer_ptr->initCameraParameters();
 
 		pcl::console::print_info("\n[TESTBENCH] Press q to begin the registration.\n");
-		vizResultAddOne<PointType>(nullptr, 0); // show source in right
+		vizResultAddOne<pcl::PointXYZRGB>(nullptr, 0); // show source in right
 		visualizer_ptr->spin();
 	}
 
-	template <>
-	void vizResultAddOne<pcl::PointXYZ>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx)
-	{
+	template <typename T>
+	void vizResultAddOne(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx) {
 		if (is_viz_result_first_loop)
 		{
-			pcl::visualization::PointCloudColorHandlerCustom<PointType> src_h(cloud_src_ptr, 255, 0, 0);
+			pcl::visualization::PointCloudColorHandlerCustom<T> src_h(cloud_src_ptr, 255, 0, 0);
 			visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
 			is_viz_result_first_loop = false;
 		}
@@ -366,20 +357,20 @@ class TestBench
 		double g = clouds_tgt_color[tgt_idx]->GetComponent(0, 1);
 		double b = clouds_tgt_color[tgt_idx]->GetComponent(0, 2);
 
-		pcl::visualization::PointCloudColorHandlerCustom<PointType> tgt_h(tgt_ptr, r, g, b);
+		pcl::visualization::PointCloudColorHandlerCustom<T> tgt_h(tgt_ptr, r, g, b);
 
 		visualizer_ptr->addPointCloud(tgt_ptr, tgt_h, "vp2_target" + std::to_string(tgt_idx), view_port_2);
 
 		visualizer_ptr->spinOnce();
-	}
+	};
+
 
 	template <>
 	void vizResultAddOne<pcl::PointXYZRGB>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx)
 	{
-
 		if (is_viz_result_first_loop)
 		{
-			pcl::visualization::PointCloudColorHandlerRGBField<PointType> src_h(cloud_src_ptr);
+			pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> src_h(cloud_src_ptr);
 			visualizer_ptr->addPointCloud(cloud_src_ptr, src_h, "vp2_source", view_port_2);
 			is_viz_result_first_loop = false;
 		}
@@ -390,7 +381,7 @@ class TestBench
 			return;
 		}
 
-		pcl::visualization::PointCloudColorHandlerRGBField<PointType> tgt_h(tgt_ptr);
+		pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> tgt_h(tgt_ptr);
 
 		visualizer_ptr->addPointCloud(tgt_ptr, tgt_h, "vp2_target" + std::to_string(tgt_idx), view_port_2);
 
