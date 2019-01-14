@@ -17,15 +17,17 @@
 #include <pcl/common/time.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include <thread>
+#include <chrono>
 
 template <typename PointType>
 class TestBench
 {
-  public:
+public:
 	typedef boost::shared_ptr<TestBench<PointType>> Ptr;
 
 	inline Ptr
-	makeShared() const { return Ptr(this); }
+		makeShared() const { return Ptr(this); }
 
 	/**
 	* \brief constructor indicate new class
@@ -44,6 +46,7 @@ class TestBench
 		cfg_file = YAML::LoadFile(path);
 		grid_filter_leafsize = cfg_file["grid_filter_leafsize"].as<float>();
 		pcd_file_paths = cfg_file["pcd_files_path"].as<std::vector<std::string>>();
+		result_output_path_root = cfg_file["result_output_path_root"].as<std::string>();
 		ref_trans_path = cfg_file["ref_trans_path"].as<std::string>();
 		has_ref_transformation = cfg_file["has_ref_transformation"].as<bool>();
 		pcl::console::print_info("[TESTBENCH] Load parameters: grid_filter_leafsize = %f\n", grid_filter_leafsize);
@@ -72,21 +75,75 @@ class TestBench
 		vizSrcTgt<PointType>();
 		doAlignAll();
 		computeResult();
+		if (has_ref_transformation)
+			saveResult();
 		pcl::console::print_info("\n[TESTBENCH] Press q to quit.\n");
 		visualizer_ptr->spin();
 		visualizer_ptr->close();
 	}
 
-	// TODO:
 	/**
 	* \brief save all test results
 	*/
-	void saveResults() 
+	void saveErrorResultsCsv(std::string path)
 	{
-
+		pcl::console::print_info("[TESTBENCH] Save result csv...\n");
+		std::ofstream result_file(path +"resultError.csv", std::ios::out);
+		result_file.setf(std::ios::fixed, std::ios::floatfield);
+		//result_file.precision(0);
+		result_file << "name" << ","
+			<< "error_yaw" << ","
+			<< "error_pitch" << ","
+			<< "error_roll" << ","
+			<< "error_x" << ","
+			<< "error_y" << ","
+			<< "error_z" << ","
+			<< "converge" << ","
+			<< "time_cost" << ","
+			<< "src_points" << ","
+			<< "tgt_points" << ","
+			<< "file_path" << ","
+			<< std::endl;
+		int idx = 1;
+		for (auto &result : results) {
+			result_file << "transformation_" + std::to_string(idx++) << ",";
+			result_file.precision(5);
+			result_file 
+				<< result.error_euler(0) << ","
+				<< result.error_euler(1) << ","
+				<< result.error_euler(2) << ","
+				<< result.error_trans(0) << ","
+				<< result.error_trans(1) << ","
+				<< result.error_trans(2) << ","
+				<< (result.is_converged?"true":"false") << ","
+				<< result.time_cost << ","
+				<< result.point_size_src << ","
+				<< result.point_size_tgt << ","
+				<< result.pcd_file << ","
+				<< std::endl;
+		}
+		result_file.close();
 	}
 
-  protected:
+	void saveRegPCD(std::string path) {
+		pcl::console::print_info("[TESTBENCH] Save result pcd...\n");
+		pcl::io::savePCDFileBinary(path + "source.pcd", cloud_src);
+		int idx = 1;
+		for (auto &result : results) {
+			pcl::io::savePCDFileBinary(path + "reg_"+std::to_string(idx)+".pcd", *result.cloud_reg_ptr);
+			idx++;
+		}
+	}
+
+
+	void saveResult() {
+		result_output_path = result_output_path_root + reg_candidate_name + "/";
+		boost::filesystem::create_directories(boost::filesystem::path(result_output_path));
+		saveErrorResultsCsv(result_output_path);
+		saveRegPCD(result_output_path);
+	}
+
+protected:
 	YAML::Node cfg_file;
 	std::string reg_candidate_name;
 
@@ -110,9 +167,9 @@ class TestBench
 	 * \return aligned point cloud and estimated transformation
 	 */
 	virtual bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
-							 pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f &transform) = 0;
+		pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f &transform) = 0;
 
-  private:
+private:
 	typedef struct
 	{
 		bool is_converged = false;
@@ -130,6 +187,8 @@ class TestBench
 
 	std::string cfg_file_path;
 	std::vector<std::string> pcd_file_paths;
+	std::string result_output_path;
+	std::string result_output_path_root;
 	std::string ref_trans_path;
 	double grid_filter_leafsize;
 	bool has_ref_transformation;
@@ -180,7 +239,7 @@ class TestBench
 		std::ifstream fin(path);
 		YAML::Node doc = YAML::Load(fin);
 		std::cout << "[TESTBENCH] Loading reference transformations ..."
-				  << "\n";
+			<< "\n";
 		if (doc.size() != clouds_tgt.size())
 		{
 			pcl::console::print_error(
@@ -221,7 +280,7 @@ class TestBench
 		grid.filter(cloud_src_filtered);
 		cloud_src_filtered_ptr = cloud_src_filtered.makeShared();
 		pcl::console::print_info("[TESTBENCH] Filtered source point cloud size: %d / %d\n",
-								 cloud_src_filtered.size(), cloud_src.size());
+			cloud_src_filtered.size(), cloud_src.size());
 
 		for (auto &cloud_ptr : clouds_tgt_ptr)
 		{
@@ -230,7 +289,7 @@ class TestBench
 			grid.filter(clouds_tgt_filtered.back());
 			clouds_tgt_filtered_ptr.push_back(clouds_tgt_filtered.back().makeShared());
 			pcl::console::print_info("[TESTBENCH] Filtered target point cloud size: %d / %d\n",
-									 clouds_tgt_filtered.back().size(), cloud_ptr->size());
+				clouds_tgt_filtered.back().size(), cloud_ptr->size());
 		}
 	}
 
@@ -243,12 +302,10 @@ class TestBench
 			Eigen::Matrix4f final_transformation = result.final_transformation;
 			Eigen::Matrix4f ref_transformation = result.ref_transformation;
 			Eigen::Matrix4f error_transformation = ref_transformation * final_transformation.inverse();
-			Eigen::Vector3f error_euler, error_trans;
+			Eigen::Vector3f error_trans;
+			Eigen::Vector3f error_euler = 180.0/M_PI*rot2EulerZYX(error_transformation.block<3, 3>(0, 0)); // deg
 			Eigen::Quaternionf error_q(error_transformation.block<3, 3>(0, 0));
-			//error_euler = ref_translation.block<3, 3>(0, 0).eulerAngles(2, 1, 0) - final_trans.block<3, 3>(0, 0).eulerAngles(2, 1, 0);
-			//warpErrorEuler(error_euler);
-			//error_euler *= (180 / M_PI);
-			//results[i].error_euler = error_euler;
+			results[i].error_euler = error_euler; // deg
 			result.error_quat = error_q;
 			result.error_trans = error_trans = error_transformation.block<3, 1>(0, 3);
 
@@ -258,24 +315,31 @@ class TestBench
 			pcl::console::print_info("R = | %6.3f %6.3f %6.3f | \n", T(1, 0), T(1, 1), T(1, 2));
 			pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", T(2, 0), T(2, 1), T(2, 2));
 			pcl::console::print_info("t = [ %0.3f, %0.3f, %0.3f ]\n", T(0, 3), T(1, 3), T(2, 3));
-			//pcl::console::print_info("Error euler: [ %6.3f, %6.3f, %6.3f ] (deg)\n", error_euler(0), error_euler(1), error_euler(2));
+			
 			if (has_ref_transformation)
 			{
-				if (abs(error_q.w()) > 0.99)
-					pcl::console::print_info("Error quaternion: [ x: %4.3f, y: %4.3f, z: %4.3f, w: %4.3f ]\n", error_q.x(), error_q.y(), error_q.z(), error_q.w());
+				if (result.is_converged)
+					pcl::console::print_info("Has converged: %s\n", "true");
 				else
-					pcl::console::print_warn("Error quaternion: [ x: %4.3f, y: %4.3f, z: %4.3f, w: %4.3f ]\n", error_q.x(), error_q.y(), error_q.z(), error_q.w());
+					pcl::console::print_warn("Has converged: %s\n", "false");
 
+				// rotation error
+				if (abs(error_q.w()) > 0.99) {
+					pcl::console::print_info("Error quaternion: [ x: %4.3f, y: %4.3f, z: %4.3f, w: %4.3f ]\n", error_q.x(), error_q.y(), error_q.z(), error_q.w());
+					pcl::console::print_info("Error euler: [ %6.3f, %6.3f, %6.3f ] (deg)\n", error_euler(0), error_euler(1), error_euler(2));
+				}
+				else {
+					pcl::console::print_warn("Error quaternion: [ x: %4.3f, y: %4.3f, z: %4.3f, w: %4.3f ]\n", error_q.x(), error_q.y(), error_q.z(), error_q.w());
+					pcl::console::print_warn("Error euler: [ %6.3f, %6.3f, %6.3f ] (deg)\n", error_euler(0), error_euler(1), error_euler(2));
+				}
+
+				// translation error
 				if (error_trans.norm() < 0.1)
 					pcl::console::print_info("Error translation: [ %6.3f, %6.3f, %6.3f ] (m)\n", error_trans(0), error_trans(1), error_trans(2));
 				else
 					pcl::console::print_warn("Error translation: [ %6.3f, %6.3f, %6.3f ] (m)\n", error_trans(0), error_trans(1), error_trans(2));
 			}
-			if (result.is_converged)
-				pcl::console::print_info("Has converged: %s\n", "true");
-			else
-				pcl::console::print_warn("Has converged: %s\n", "false");
-
+			
 			pcl::console::print_info("Time cost: %.4f (s)\n", result.time_cost);
 
 			pcl::console::print_info("Point cloud size: src=%d, tgt=%d\n", result.point_size_src, result.point_size_tgt);
@@ -284,15 +348,13 @@ class TestBench
 		}
 	}
 
-	void warpErrorEuler(Eigen::Vector3f &euler)
+	Eigen::Vector3f rot2EulerZYX(Eigen::Matrix3f rot)
 	{
-		for (int i = 0; i < 3; ++i)
-		{
-			while (euler(i) > M_PI)
-				euler(i) -= 2 * M_PI;
-			while (euler(i) < -M_PI)
-				euler(i) += 2 * M_PI;
-		}
+		Eigen::Vector3f euler;
+		euler(1) = asin(rot(0, 2));
+		euler(2) = asin(rot(1, 2) / cos(euler(1)));
+		euler(3) = asin(rot(0, 1) / cos(euler(1)));
+		return euler;
 	}
 
 	template <typename T>
@@ -303,8 +365,8 @@ class TestBench
 		int idx = 0;
 		for (auto &pcd_ptr : clouds_tgt_ptr)
 		{
-			pcl::visualization::PointCloudColorHandlerCustom<T> tgt_h(pcd_ptr, 
-				255 * (rand()/(RAND_MAX+1.0)), 255 * (rand() / (RAND_MAX + 1.0)), 255 * (rand() / (RAND_MAX + 1.0)));
+			pcl::visualization::PointCloudColorHandlerCustom<T> tgt_h(pcd_ptr,
+				255 * (rand() / (RAND_MAX + 1.0)), 255 * (rand() / (RAND_MAX + 1.0)), 255 * (rand() / (RAND_MAX + 1.0)));
 			visualizer_ptr->addPointCloud(pcd_ptr, tgt_h, "vp1_target" + std::to_string(++idx), view_port_1);
 			clouds_tgt_color.emplace_back();
 			tgt_h.getColor(clouds_tgt_color.back());
@@ -408,8 +470,7 @@ class TestBench
 		pcl::PointCloud<PointType> reg_cloud, reg_cloud_filtered;
 		Eigen::Matrix4f final_transform;
 		pcl::console::print_info("[TESTBENCH] Start registration...\n");
-		for (int i = 0; i < clouds_tgt_filtered.size(); ++i)
-		{
+		for (int i = 0; i < clouds_tgt_filtered.size(); ++i){
 			pcl::console::print_info("[TESTBENCH] Registration %d start...\n", i + 1);
 
 			stop_watch.reset();

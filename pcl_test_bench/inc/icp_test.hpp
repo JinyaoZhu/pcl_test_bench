@@ -13,7 +13,7 @@ template <typename PointType>
 class IcpTest : public TestBench<PointType> {
 
 public:
-	IcpTest():alg_name("Iterative Closest Point")
+	IcpTest():alg_name("IterativeClosestPoint")
 	{
 
 	}

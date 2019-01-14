@@ -20,7 +20,7 @@ template <typename PointType>
 class ScpTest : public TestBench<PointType> {
 
 public:
-	ScpTest():alg_name("Sample Consensus Prerejective")
+	ScpTest() :alg_name("SampleConsensusPrerejective")
 	{
 		is_first_loop = true;
 		typename pcl::search::KdTree<PointType>::Ptr tree_ptr = boost::make_shared<pcl::search::KdTree<PointType>>(kd_tree);
@@ -36,7 +36,7 @@ public:
 		TestBench<PointType>::reg_candidate_name = alg_name;
 		std::string path = TestBench<PointType>::cfg_file["scp_cfg_path"].as<std::string>();
 		alg_cfg = YAML::LoadFile(path);
-		
+
 		float norm_est_radius_search;
 		float fpfh_est_radius_search;
 		float scp_max_corr_distance;
@@ -75,14 +75,14 @@ public:
 		scp_reg.setNumberOfSamples(scp_number_of_samples);
 	}
 
-	bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud,const pcl::PointCloud<PointType> &tgt_cloud,
-		             pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f& transform) {
+	bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
+		pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f& transform) {
 
 		typename pcl::PointCloud<PointType>::Ptr src_cloud_ptr = src_cloud.makeShared();
 		typename pcl::PointCloud<PointType>::Ptr tgt_cloud_ptr = tgt_cloud.makeShared();
 
 
-		if(is_first_loop){
+		if (is_first_loop) {
 			// Estimate the normals and the FPFH features for the source cloud
 			norm_est.setInputCloud(src_cloud_ptr);
 			norm_est.compute(norm_est_src);
@@ -92,7 +92,7 @@ public:
 			fpfh_est.compute(features_src);
 			is_first_loop = false;
 		}
-		
+
 		// Estimate the normals and the FPFH features for the target cloud
 		norm_est.setInputCloud(tgt_cloud_ptr);
 		norm_est.compute(norm_est_tgt);

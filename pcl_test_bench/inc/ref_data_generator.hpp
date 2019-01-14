@@ -9,6 +9,7 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/io/ply_io.h>
 #include <pcl/filters/extract_indices.h>
 
 namespace YAML {
@@ -46,8 +47,15 @@ public:
 
 		pcl::PointCloud<PointType> cloud_source;
 
-		if (pcl::io::loadPCDFile(pcd_path, cloud_source) == -1) {
-			return false;
+		if (pcd_path.find(".pcd") != std::string::npos) {
+			if (pcl::io::loadPCDFile(pcd_path, cloud_source) < 0) {
+				return false;
+			}
+		}
+		else if (pcd_path.find(".ply") != std::string::npos) {
+			if (pcl::io::loadPLYFile(pcd_path, cloud_source) < 0) {
+				return false;
+			}
 		}
 
 		PointType centroid;
@@ -82,7 +90,7 @@ public:
 		std::cout << "Maximal rotation angle(deg): ";
 		std::cin >> max_angle;
 
-		pcl::io::savePCDFileASCII(output_path+"trans_0.pcd", cloud_source);
+		pcl::io::savePCDFileBinary(output_path+"trans_0.pcd", cloud_source);
 
 		std::cout << "Add noise to point clouds?(y/n):";
 		std::cin >> add_noise;
@@ -123,7 +131,7 @@ public:
 						inliers->indices.push_back(i);
 					else {
 						std::default_random_engine generator;
-						std::normal_distribution<double> distribution(0, 0.003);
+						std::normal_distribution<double> distribution(0, 0.005);
 						point.x += distribution(generator);
 						point.y += distribution(generator);
 						point.z += distribution(generator);
@@ -146,7 +154,7 @@ public:
 			std::string node_name = "transformation_" + std::to_string(i + 1);
 			std::string pcd_name = output_path + "trans_" + std::to_string(i + 1) + ".pcd";
 
-			pcl::io::savePCDFileASCII(pcd_name, cloud_source_transformed);
+			pcl::io::savePCDFileBinary(pcd_name, cloud_source_transformed);
 			ref_trans[node_name.c_str()] = transform;
 		}
 

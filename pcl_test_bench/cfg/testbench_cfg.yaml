@@ -1,19 +1,6 @@
+# Leaf size for grid filter
+grid_filter_leafsize: 0.005
 
-# https://rgbd-dataset.cs.washington.edu/dataset/rgbd-dataset_pcd_ascii/
-# src_pcd: ../data/bun03.pcd
-# target_pcd: ../data/bun4.pcd
-
-# src_pcd: pcd/water_bottle_1_1_1.pcd
-# target_pcd: pcd/water_bottle_1_1_47.pcd
-
-# src_pcd: pcd/coffee_mug_1_1_1.pcd
-# target_pcd: pcd/coffee_mug_1_1_68.pcd
-
-# src_pcd: pcd/bun4.pcd
-# target_pcd: [
-#       pcd/bun01.pcd,
-#       pcd/bun03.pcd,
-#       ]
 scp_cfg_path: cfg/scp_cfg.yaml
 icp_cfg_path: cfg/icp_cfg.yaml
 
@@ -38,5 +25,4 @@ pcd_files_path:
 
 ref_trans_path: ref/ref_trans.yaml
 
-# Leaf size for grid filter
-grid_filter_leafsize: 0.005
+result_output_path_root: res/
