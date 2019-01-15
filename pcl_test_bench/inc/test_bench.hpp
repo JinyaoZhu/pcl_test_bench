@@ -91,7 +91,8 @@ public:
 		std::ofstream result_file(path +"resultError.csv", std::ios::out);
 		result_file.setf(std::ios::fixed, std::ios::floatfield);
 		//result_file.precision(0);
-		result_file << "name" << ","
+		result_file <<reg_candidate_name << std::endl
+			<< "name" << ","
 			<< "error_yaw" << ","
 			<< "error_pitch" << ","
 			<< "error_roll" << ","
@@ -281,15 +282,15 @@ private:
 		cloud_src_filtered_ptr = cloud_src_filtered.makeShared();
 		pcl::console::print_info("[TESTBENCH] Filtered source point cloud size: %d / %d\n",
 			cloud_src_filtered.size(), cloud_src.size());
-
+		int idx = 1;
 		for (auto &cloud_ptr : clouds_tgt_ptr)
 		{
 			grid.setInputCloud(cloud_ptr);
 			clouds_tgt_filtered.emplace_back();
 			grid.filter(clouds_tgt_filtered.back());
 			clouds_tgt_filtered_ptr.push_back(clouds_tgt_filtered.back().makeShared());
-			pcl::console::print_info("[TESTBENCH] Filtered target point cloud size: %d / %d\n",
-				clouds_tgt_filtered.back().size(), cloud_ptr->size());
+			pcl::console::print_info("[TESTBENCH] Filtered target point cloud %d size: %d / %d\n",
+				idx++,clouds_tgt_filtered.back().size(), cloud_ptr->size());
 		}
 	}
 
@@ -351,9 +352,9 @@ private:
 	Eigen::Vector3f rot2EulerZYX(Eigen::Matrix3f rot)
 	{
 		Eigen::Vector3f euler;
-		euler(1) = asin(rot(0, 2));
-		euler(2) = asin(rot(1, 2) / cos(euler(1)));
-		euler(3) = asin(rot(0, 1) / cos(euler(1)));
+		euler(0) = asin(rot(0, 2));
+		euler(1) = asin(rot(1, 2) / cos(euler(1)));
+		euler(2) = asin(rot(0, 1) / cos(euler(1)));
 		return euler;
 	}
 

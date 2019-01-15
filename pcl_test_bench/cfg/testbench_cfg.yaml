@@ -1,25 +1,37 @@
 # Leaf size for grid filter
-grid_filter_leafsize: 0.005
+grid_filter_leafsize: 0.5
 
 scp_cfg_path: cfg/scp_cfg.yaml
 icp_cfg_path: cfg/icp_cfg.yaml
 
 has_ref_transformation: true
 
-pcd_files_path: 
-[               ref/trans_0.pcd, #source point cloud
-#---------------------------------------------
-                  ref/trans_1.pcd,
-                  ref/trans_2.pcd,
-                  ref/trans_3.pcd,             
-                  ref/trans_4.pcd,             
-                  ref/trans_5.pcd,
-                  ref/trans_6.pcd,
-                  ref/trans_7.pcd,
-                  ref/trans_8.pcd,             
-                  ref/trans_9.pcd,             
-                  ref/trans_10.pcd,
-]
+# pcd_files_path: 
+#              - pcd/room_scan1.pcd  #source point cloud
+#              - pcd/room_scan2.pcd
+
+pcd_files_path:
+  - ref/trans_0.pcd
+  - ref/trans_1.pcd
+  - ref/trans_2.pcd
+  - ref/trans_3.pcd
+  - ref/trans_4.pcd
+  - ref/trans_5.pcd
+  - ref/trans_6.pcd
+  - ref/trans_7.pcd
+  - ref/trans_8.pcd
+  - ref/trans_9.pcd
+  - ref/trans_10.pcd
+  - ref/trans_11.pcd
+  - ref/trans_12.pcd
+  - ref/trans_13.pcd
+  - ref/trans_14.pcd
+  - ref/trans_15.pcd
+  - ref/trans_16.pcd
+  - ref/trans_17.pcd
+  - ref/trans_18.pcd
+  - ref/trans_19.pcd
+  - ref/trans_20.pcd
 
 # pcd_files_path: [chef.pcd, rs1.pcd]
 

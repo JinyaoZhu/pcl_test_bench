@@ -68,17 +68,13 @@ public:
 		}
 
 		boost::filesystem::path dir(output_path);
+		boost::filesystem::create_directories(dir);
 
-		if (!(boost::filesystem::exists(dir))) {
-			std::cout << output_path << " doesn't exists." << std::endl;
-
-			if (boost::filesystem::create_directory(dir))
-				std::cout << output_path << " successfully created." << std::endl;
-		}
-
-		std::ofstream fout(output_path + "ref_trans.yaml");
+		std::ofstream ref_trans_fout(output_path + "ref_trans.yaml");
+		std::ofstream parameter_fout(output_path + "info.yaml");
 
 		YAML::Node ref_trans = YAML::Load("");
+		YAML::Node parameter = YAML::Load("");
 
 		double max_translation; // [m]
 		double max_angle; // [deg]
@@ -90,11 +86,21 @@ public:
 		std::cout << "Maximal rotation angle(deg): ";
 		std::cin >> max_angle;
 
-		pcl::io::savePCDFileBinary(output_path+"trans_0.pcd", cloud_source);
-
+		parameter["max_translation(m)"] = max_translation;
+		parameter["max_rotation(deg)"] = max_angle;
+		
 		std::cout << "Add noise to point clouds?(y/n):";
 		std::cin >> add_noise;
 
+		double noise_std = 0;//[m]
+		if (add_noise == "y") {
+			std::cout << "noise std(m):";
+			std::cin >> noise_std;
+			parameter["noise_std(m)"] = noise_std;
+		}
+
+		pcl::io::savePCDFileBinary(output_path + "trans_0.pcd", cloud_source);
+		parameter["output_file"].push_back(output_path + "trans_0.pcd");
 		for (int i = 0; i < num_pcd; ++i) {
 			Eigen::Vector3f t = max_translation * Eigen::Vector3f::Random();
 			Eigen::Vector3f euler = (M_PI/180)*max_angle * Eigen::Vector3f::Random();
@@ -131,7 +137,7 @@ public:
 						inliers->indices.push_back(i);
 					else {
 						std::default_random_engine generator;
-						std::normal_distribution<double> distribution(0, 0.005);
+						std::normal_distribution<double> distribution(0, noise_std);
 						point.x += distribution(generator);
 						point.y += distribution(generator);
 						point.z += distribution(generator);
@@ -156,11 +162,14 @@ public:
 
 			pcl::io::savePCDFileBinary(pcd_name, cloud_source_transformed);
 			ref_trans[node_name.c_str()] = transform;
+			parameter["output_file"].push_back(pcd_name);
 		}
 
-		fout << ref_trans;
-		fout.close();
+		ref_trans_fout << ref_trans;
+		ref_trans_fout.close();
 
+		parameter_fout << parameter;
+		parameter_fout.close();
 		return true;
 	}
 };
