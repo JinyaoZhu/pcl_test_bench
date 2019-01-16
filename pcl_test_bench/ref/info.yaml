@@ -1,6 +1,6 @@
-max_translation(m): 2
-max_rotation(deg): 60
-noise_std(m): 0.05
+max_translation(m): 0.5
+max_rotation(deg): 20
+noise_std(m): 0.01
 output_file:
   - ref/trans_0.pcd
   - ref/trans_1.pcd
@@ -23,3 +23,13 @@ output_file:
   - ref/trans_18.pcd
   - ref/trans_19.pcd
   - ref/trans_20.pcd
+  - ref/trans_21.pcd
+  - ref/trans_22.pcd
+  - ref/trans_23.pcd
+  - ref/trans_24.pcd
+  - ref/trans_25.pcd
+  - ref/trans_26.pcd
+  - ref/trans_27.pcd
+  - ref/trans_28.pcd
+  - ref/trans_29.pcd
+  - ref/trans_30.pcd

@@ -41,7 +41,7 @@ void refCloudGenerator() {
 	std::cout << "Source .pcd/.ply file(eg: bun0.pcd bun0.ply): ";
 	std::cin >> src_cloud_path;
 	while (src_cloud_path.find(".pcd") == std::string::npos && src_cloud_path.find(".ply") == std::string::npos) {
-		std::cout << "\x1B[31m Invalid source file type. \x1B[0m" << "\n";
+		std::cout << "Invalid source file type." << "\n";
 		std::cout << "Source .pcd/.ply file(eg: bun0.pcd bun0.ply): ";
 		std::cin >> src_cloud_path;
 	}
@@ -49,7 +49,7 @@ void refCloudGenerator() {
 	std::cout << "Output path(eg: ref/): ";
 	std::cin >> output_path;
 	while (output_path.find("/") != (output_path.size() - 1)) {
-		std::cout << "\x1B[31m Invalid output path, output path must be a folder(eg: ref/). \x1B[0m" << "\n";
+		std::cout << "Invalid output path, output path must be a folder(eg: ref/)." << "\n";
 		std::cout << "Output path(eg: ref/): ";
 		std::cin >> output_path;
 	}

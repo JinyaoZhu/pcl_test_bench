@@ -32,6 +32,16 @@ pcd_files_path:
   - ref/trans_18.pcd
   - ref/trans_19.pcd
   - ref/trans_20.pcd
+  - ref/trans_21.pcd
+  - ref/trans_22.pcd
+  - ref/trans_23.pcd
+  - ref/trans_24.pcd
+  - ref/trans_25.pcd
+  - ref/trans_26.pcd
+  - ref/trans_27.pcd
+  - ref/trans_28.pcd
+  - ref/trans_29.pcd
+  - ref/trans_30.pcd
 
 # pcd_files_path: [chef.pcd, rs1.pcd]
 
