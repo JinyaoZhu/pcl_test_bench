@@ -103,12 +103,13 @@ public:
 			<< "time_cost" << ","
 			<< "src_points" << ","
 			<< "tgt_points" << ","
+			<< "fitness" << ","
 			<< "file_path" << ","
 			<< std::endl;
 		int idx = 1;
 		for (auto &result : results) {
 			result_file << "transformation_" + std::to_string(idx++) << ",";
-			result_file.precision(5);
+			result_file.precision(6);
 			result_file 
 				<< result.error_euler(0) << ","
 				<< result.error_euler(1) << ","
@@ -120,6 +121,7 @@ public:
 				<< result.time_cost << ","
 				<< result.point_size_src << ","
 				<< result.point_size_tgt << ","
+				<< result.fitness << ","
 				<< result.pcd_file << ","
 				<< std::endl;
 		}
@@ -170,6 +172,11 @@ protected:
 	virtual bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
 		pcl::PointCloud<PointType> &reg_cloud, Eigen::Matrix4f &transform) = 0;
 
+	/**
+	* \brief return fitness score of the alignment, define by user
+	*/
+	virtual double getFitness() = 0;
+
 private:
 	typedef struct
 	{
@@ -182,6 +189,7 @@ private:
 		Eigen::Quaternionf error_quat;
 		Eigen::Vector3f error_trans;
 		double time_cost;
+		double fitness;
 		int point_size_src;
 		int point_size_tgt;
 	} Result;
@@ -340,6 +348,8 @@ private:
 				else
 					pcl::console::print_warn("Error translation: [ %6.3f, %6.3f, %6.3f ] (m)\n", error_trans(0), error_trans(1), error_trans(2));
 			}
+
+			pcl::console::print_info("Fitness score: %.6f (m)\n", result.fitness);
 			
 			pcl::console::print_info("Time cost: %.4f (s)\n", result.time_cost);
 
@@ -491,6 +501,7 @@ private:
 			results[i].time_cost = time_cost;
 			results[i].point_size_src = cloud_src_filtered.size();
 			results[i].point_size_tgt = clouds_tgt_filtered[i].size();
+			results[i].fitness = getFitness();
 
 			vizResultAddOne<PointType>(clouds_reg_ptr.back(), i);
 			pcl::console::print_highlight("[TESTBENCH] Registration %d finished, time cost: %.4f[s]\n", i + 1, time_cost);

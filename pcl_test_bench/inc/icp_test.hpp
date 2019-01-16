@@ -48,6 +48,10 @@ public:
 		return icp.hasConverged();
 	}
 
+	double getFitness() {
+		return icp.getFitnessScore();
+	}
+
 private:
 	pcl::IterativeClosestPoint<PointType, PointType> icp;
 	std::string alg_name;

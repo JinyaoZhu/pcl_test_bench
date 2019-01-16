@@ -22,7 +22,6 @@ class ScpTest : public TestBench<PointType> {
 public:
 	ScpTest() :alg_name("SCP")
 	{
-		is_first_loop = true;
 		typename pcl::search::KdTree<PointType>::Ptr tree_ptr = boost::make_shared<pcl::search::KdTree<PointType>>(kd_tree);
 		//typename pcl::search::BruteForce< PointType >::Ptr tree_ptr(new pcl::search::BruteForce< PointType >);
 		norm_est.setSearchMethod(tree_ptr);
@@ -82,16 +81,13 @@ public:
 		typename pcl::PointCloud<PointType>::Ptr tgt_cloud_ptr = tgt_cloud.makeShared();
 
 
-		if (is_first_loop) {
-			// Estimate the normals and the FPFH features for the source cloud
-			norm_est.setInputCloud(src_cloud_ptr);
-			norm_est.compute(norm_est_src);
+		// Estimate the normals and the FPFH features for the source cloud
+		norm_est.setInputCloud(src_cloud_ptr);
+		norm_est.compute(norm_est_src);
 
-			fpfh_est.setInputCloud(src_cloud_ptr);
-			fpfh_est.setInputNormals(norm_est_src.makeShared());
-			fpfh_est.compute(features_src);
-			is_first_loop = false;
-		}
+		fpfh_est.setInputCloud(src_cloud_ptr);
+		fpfh_est.setInputNormals(norm_est_src.makeShared());
+		fpfh_est.compute(features_src);
 
 		// Estimate the normals and the FPFH features for the target cloud
 		norm_est.setInputCloud(tgt_cloud_ptr);
@@ -115,9 +111,12 @@ public:
 		return scp_reg.hasConverged();
 	}
 
+	double getFitness() {
+		return scp_reg.getFitnessScore();
+	}
+
 private:
 	std::string alg_name;
-	bool is_first_loop;
 
 	pcl::SampleConsensusPrerejective<PointType, PointType, pcl::FPFHSignature33> scp_reg;
 	pcl::FPFHEstimationOMP<PointType, pcl::Normal, pcl::FPFHSignature33> fpfh_est;

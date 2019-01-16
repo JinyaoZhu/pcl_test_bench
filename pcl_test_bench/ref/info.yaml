@@ -1,6 +1,6 @@
-max_translation(m): 0.5
+max_translation(m): 1
 max_rotation(deg): 20
-noise_std(m): 0.01
+noise_std(m): 0.05
 output_file:
   - ref/trans_0.pcd
   - ref/trans_1.pcd

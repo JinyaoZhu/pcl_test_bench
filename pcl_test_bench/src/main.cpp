@@ -9,6 +9,7 @@
 #include <icp_test.hpp>
 #include <icpnl_test.hpp>
 #include <gicp_test.hpp>
+#include <ndt_test.hpp>
 
 typedef pcl::PointXYZ PointType;
 
@@ -78,6 +79,7 @@ int main(int argc, char **argv)
 		std::cout << "[3] Run Test Bench: ICP.\n";
 		std::cout << "[4] Run Test Bench: ICP NL.\n";
 		std::cout << "[5] Run Test Bench: GICP.\n";
+		std::cout << "[6] Run Test Bench: NDT.\n";
 		std::cout << "[q] Quit.\n";
 		std::cout << "Your input: ";
 		std::cin >> user_input;
@@ -105,6 +107,11 @@ int main(int argc, char **argv)
 		}
 		else if (user_input == "5") {
 			GICPTest<PointType> test_bench = GICPTest<PointType>();
+			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
+			test_bench.runTestBench();
+		}
+		else if (user_input == "6") {
+			NDTTest<PointType> test_bench = NDTTest<PointType>();
 			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
 			test_bench.runTestBench();
 		}

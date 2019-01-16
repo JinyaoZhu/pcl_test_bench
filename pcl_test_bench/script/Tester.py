@@ -10,10 +10,10 @@ class Tester:
            os.makedirs(name)
 
     def loadCsv(self, path):
-        self.result_csv = np.genfromtxt(path, dtype="U20,f,f,f,f,f,f,U5,f,i,i,U20", 
+        self.result_csv = np.genfromtxt(path, dtype="U20,f,f,f,f,f,f,U5,f,i,i,f,U20", 
             skip_header = 2, delimiter=',',names=[
             'trans_name','error_yaw','error_pitch','error_roll','error_x','error_y','error_z',
-            'converge','time_cost','src_points','tgt_points','file_path',"what"
+            'converge','time_cost','src_points','tgt_points','fitness','file_path',
         ])
         data = self.result_csv
         self.index = np.arange(1,data['trans_name'].size+1, dtype="i")
@@ -32,6 +32,7 @@ class Tester:
         self.error_trans_std = np.std(self.error_trans,axis=1)
         self.error_euler_std = np.std(self.error_euler,axis=1)
         self.time_cost_std = np.std(self.time_cost)
+        self.fitness = data['fitness']
 
     def plotRotError(self):
         # fig, ax = plt.subplots()
@@ -56,7 +57,7 @@ class Tester:
         plt.title('Rotational Error(absolute)')
         plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
         plt.legend(loc='best')
-        plt.grid(linestyle=':')
+        # plt.grid(linestyle=':')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
         plt.close()
@@ -83,7 +84,7 @@ class Tester:
         plt.title('Translational Error(absolute)')
         plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
         plt.legend(loc='best')
-        plt.grid(linestyle=':')
+        # plt.grid(linestyle=':')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
         plt.close()
@@ -99,10 +100,10 @@ class Tester:
                             label='time cost')
             plt.xlabel('n th run')
             plt.ylabel('Time(s)')
-            plt.title('Time Cost')
+            plt.title('Time Cost (avg.=%.4fs)'%np.mean(self.time_cost))
             plt.xticks(self.index, np.array([str(x) if x%5==0 else "" for x in self.index]))
             plt.axhline(np.mean(self.time_cost),color='r', linestyle='--')
-            plt.grid(linestyle=':')
+            # plt.grid(linestyle=':')
             plt.tight_layout()
             fig.savefig(self.name+'/'+fig_name, dpi=300)
             plt.close()
@@ -171,8 +172,27 @@ class Tester:
         plt.ylabel('size (point)')
         plt.title('Target Size(Source Size = %i)'%self.src_points[0])
         plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
-        plt.grid(linestyle=':')
+        # plt.grid(linestyle=':')
         plt.axhline(np.mean(self.tgt_points),color='r', linestyle='--')
+        plt.tight_layout()
+        fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
+
+    def plotFitness(self):
+        fig_name = self.name + " Fitness"
+        fig  = plt.figure(fig_name,figsize=(4,3))
+        bar_width = 0.5
+        opacity = 0.8
+        rects1 = plt.bar(self.index + bar_width, self.fitness, bar_width,
+                        alpha=opacity,
+                        color=['b'if x=='true'else'grey' for x in self.is_converge],
+                        label='')
+        plt.xlabel('n th run')
+        plt.ylabel('Fitness (m)')
+        plt.title('Fitness Score (avg.=%.4fm)'%(np.mean(self.fitness)))
+        plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
+        # plt.grid(linestyle=':')
+        plt.axhline(np.mean(self.fitness),color='r', linestyle='--')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
         plt.close()
@@ -186,3 +206,4 @@ class Tester:
         self.plotTransStat()
         self.plotTimeCostStat()
         self.plotPointSize()
+        self.plotFitness()

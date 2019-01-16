@@ -46,6 +46,10 @@ class GICPTest : public TestBench<PointType>
         return reg.hasConverged(); // only return true if the registration is converge
     }
 
+	double getFitness() {
+		return reg.getFitnessScore();
+	}
+
   private:
     std::string alg_name; // algorithm name, this will pass to the test bench
 	pcl::GeneralizedIterativeClosestPoint<PointType, PointType> reg;
