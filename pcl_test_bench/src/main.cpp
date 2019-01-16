@@ -4,8 +4,11 @@
 #include <ref_data_generator.hpp>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
+
 #include <scp_test.hpp>
 #include <icp_test.hpp>
+#include <icpnl_test.hpp>
+#include <gicp_test.hpp>
 
 typedef pcl::PointXYZ PointType;
 
@@ -73,6 +76,8 @@ int main(int argc, char **argv)
 		std::cout << "[1] Generate point clouds with reference transformations.\n";
 		std::cout << "[2] Run Test Bench: SCP.\n";
 		std::cout << "[3] Run Test Bench: ICP.\n";
+		std::cout << "[4] Run Test Bench: ICP NL.\n";
+		std::cout << "[5] Run Test Bench: GICP.\n";
 		std::cout << "[q] Quit.\n";
 		std::cout << "Your input: ";
 		std::cin >> user_input;
@@ -90,6 +95,16 @@ int main(int argc, char **argv)
 		}
 		else if (user_input == "3") {
 			IcpTest<PointType> test_bench = IcpTest<PointType>();
+			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
+			test_bench.runTestBench();
+		}
+		else if (user_input == "4") {
+			ICPNLTest<PointType> test_bench = ICPNLTest<PointType>();
+			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
+			test_bench.runTestBench();
+		}
+		else if (user_input == "5") {
+			GICPTest<PointType> test_bench = GICPTest<PointType>();
 			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
 			test_bench.runTestBench();
 		}

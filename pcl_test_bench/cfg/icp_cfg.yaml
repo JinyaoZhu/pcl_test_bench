@@ -1,1 +1,2 @@
-icp_max_iter: 10000
+icp_max_iter: 100
+max_corr_dis: 1

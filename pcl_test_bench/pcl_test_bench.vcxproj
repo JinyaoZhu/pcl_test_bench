@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\gicp_test.hpp" />
+    <ClInclude Include="inc\icpnl_test.hpp" />
     <ClInclude Include="inc\icp_test.hpp" />
     <ClInclude Include="inc\ref_data_generator.hpp" />
     <ClInclude Include="inc\scp_test.hpp" />

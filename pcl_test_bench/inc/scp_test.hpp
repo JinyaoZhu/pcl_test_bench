@@ -20,7 +20,7 @@ template <typename PointType>
 class ScpTest : public TestBench<PointType> {
 
 public:
-	ScpTest() :alg_name("SampleConsensusPrerejective")
+	ScpTest() :alg_name("SCP")
 	{
 		is_first_loop = true;
 		typename pcl::search::KdTree<PointType>::Ptr tree_ptr = boost::make_shared<pcl::search::KdTree<PointType>>(kd_tree);

@@ -3,6 +3,8 @@ grid_filter_leafsize: 0.5
 
 scp_cfg_path: cfg/scp_cfg.yaml
 icp_cfg_path: cfg/icp_cfg.yaml
+icpnl_cfg_path: cfg/icpnl_cfg.yaml
+gicp_cfg_path: cfg/gicp_cfg.yaml
 
 has_ref_transformation: true
 

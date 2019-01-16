@@ -14,10 +14,12 @@ from Benchmark import Benchmark
 #                      '../res/IterativeClosestPoint/resultError.csv']
 
 # given names of the testers
-tester_names = ['SCP','ICP']
+tester_names = ['SCP','ICP','ICPNL','GICP']
 # csv files path of each tester
-tester_result_paths = ['../res/SampleConsensusPrerejective/resultError.csv',
-                        '../res/IterativeClosestPoint/resultError.csv']
+tester_result_paths = ['../res/SCP/resultError.csv',
+                        '../res/ICP/resultError.csv',
+                        '../res/ICPNL/resultError.csv',
+                        '../res/GICP/resultError.csv']
 
 testers = []
 # load all results and plot all results

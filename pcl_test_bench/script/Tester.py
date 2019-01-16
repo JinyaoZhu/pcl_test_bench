@@ -59,6 +59,7 @@ class Tester:
         plt.grid(linestyle=':')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotTransError(self):
         fig_name = self.name + " TranslationError"
@@ -85,6 +86,7 @@ class Tester:
         plt.grid(linestyle=':')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotTimeCost(self):
             fig_name = self.name + " TimeCost"
@@ -103,6 +105,7 @@ class Tester:
             plt.grid(linestyle=':')
             plt.tight_layout()
             fig.savefig(self.name+'/'+fig_name, dpi=300)
+            plt.close()
 
     def plotStatTable(self):
         fig_name = self.name + " StatisticsTable"
@@ -121,6 +124,7 @@ class Tester:
                       loc='center',cellLoc='center')
         plt.title(self.name)
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotRotStat(self):
         fig_name = self.name + " RotationStatistics"
@@ -131,6 +135,7 @@ class Tester:
         plt.title('Rotational Error Statistics (%i runs)' % self.index.size)
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotTransStat(self):
         fig_name = self.name + " TranslationStatistics"
@@ -141,6 +146,7 @@ class Tester:
         plt.title('Translational Error Statistics (%i runs)' % self.index.size)
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotTimeCostStat(self):
         fig_name = self.name + " TimeCostStatistics"
@@ -150,6 +156,7 @@ class Tester:
         plt.title('Time Cost Statistics (%i runs)' % self.index.size)
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotPointSize(self):
         fig_name = self.name + " TgtPointSize"
@@ -168,6 +175,7 @@ class Tester:
         plt.axhline(np.mean(self.tgt_points),color='r', linestyle='--')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
+        plt.close()
 
     def plotAll(self):
         self.plotRotError()
@@ -178,6 +186,3 @@ class Tester:
         self.plotTransStat()
         self.plotTimeCostStat()
         self.plotPointSize()
-
-    def showPlot(self):
-        plt.show()

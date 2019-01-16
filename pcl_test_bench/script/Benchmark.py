@@ -29,6 +29,7 @@ class Benchmark:
         plt.legend(handles=legend_elements, loc='best')
         plt.tight_layout()
         fig.savefig(fig_name, dpi=300)
+        plt.close()
 
     def plotTransBM(self):
         fig_name = "BenchmarkTrans"
@@ -50,6 +51,7 @@ class Benchmark:
         plt.legend(handles=legend_elements, loc='best')
         plt.tight_layout()
         fig.savefig(fig_name, dpi=300)
+        plt.close()
 
     def plotTimeCostBM(self):
         fig_name = "BenchmarkTimeCost"
@@ -72,4 +74,5 @@ class Benchmark:
         plt.legend(handles=legend_elements, loc='best')
         plt.tight_layout()
         fig.savefig(fig_name, dpi=300)
+        plt.close()
 
