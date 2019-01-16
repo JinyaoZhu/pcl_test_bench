@@ -1,8 +1,6 @@
 from Tester import Tester
 from Benchmark import Benchmark
 
-
-
 # tester_names = ['SCP','ICP','ICP','ICP','ICP','ICP','ICP','ICP','ICP','ICP']
 # tester_result_paths = ['../res/SampleConsensusPrerejective/resultError.csv',
 #                      '../res/IterativeClosestPoint/resultError.csv',
@@ -14,7 +12,10 @@ from Benchmark import Benchmark
 #                      '../res/IterativeClosestPoint/resultError.csv',
 #                      '../res/IterativeClosestPoint/resultError.csv',
 #                      '../res/IterativeClosestPoint/resultError.csv']
+
+# given names of the testers
 tester_names = ['SCP','ICP']
+# csv files path of each tester
 tester_result_paths = ['../res/SampleConsensusPrerejective/resultError.csv',
                         '../res/IterativeClosestPoint/resultError.csv']
 

@@ -5,6 +5,7 @@ import os
 class Tester:
     def __init__(self, name):
         self.name = name # algorithm name
+        # create folder for each tester if not exist
         if not os.path.exists(name):
            os.makedirs(name)
 
@@ -23,6 +24,7 @@ class Tester:
         self.time_cost = data['time_cost']
         self.src_points = data['src_points']
         self.tgt_points = data['tgt_points']
+        self.tgt_points_mean = np.mean(self.tgt_points)
         self.file_path = data['file_path']
         self.error_euler_mean = np.mean(self.error_euler,axis=1)
         self.error_trans_mean = np.mean(self.error_trans,axis=1)
@@ -94,7 +96,7 @@ class Tester:
                             color=['b'if x=='true'else'grey' for x in self.is_converge],
                             label='time cost')
             plt.xlabel('n th run')
-            plt.ylabel('time(s)')
+            plt.ylabel('Time(s)')
             plt.title('Time Cost')
             plt.xticks(self.index, np.array([str(x) if x%5==0 else "" for x in self.index]))
             plt.axhline(np.mean(self.time_cost),color='r', linestyle='--')
@@ -126,7 +128,7 @@ class Tester:
         box_plot_data=[self.error_euler[0,:],self.error_euler[1,:],self.error_euler[2,:]]
         plt.boxplot(box_plot_data,patch_artist=True,labels=['yaw','pitch','roll'])
         plt.ylabel('Error(deg)')
-        plt.title('Rotational Error Statistics')
+        plt.title('Rotational Error Statistics (%i runs)' % self.index.size)
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
 
@@ -136,7 +138,7 @@ class Tester:
         box_plot_data=[self.error_trans[0,:],self.error_trans[1,:],self.error_trans[2,:]]
         plt.boxplot(box_plot_data,patch_artist=True,labels=['x','y','z'])
         plt.ylabel('Error(m)')
-        plt.title('Translational Error Statistics')
+        plt.title('Translational Error Statistics (%i runs)' % self.index.size)
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
 
@@ -144,8 +146,8 @@ class Tester:
         fig_name = self.name + " TimeCostStatistics"
         fig  = plt.figure(fig_name,figsize=(4,3))
         plt.boxplot(self.time_cost,patch_artist=True,labels=['time cost'])
-        plt.ylabel('time(s)')
-        plt.title('Time Cost Statistics')
+        plt.ylabel('Time(s)')
+        plt.title('Time Cost Statistics (%i runs)' % self.index.size)
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
 
