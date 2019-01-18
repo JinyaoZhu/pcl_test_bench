@@ -1,3 +1,6 @@
+/**
+* Point cloud generator with reference transformations and artifical noise
+*/
 #pragma	once
 #include <yaml-cpp/yaml.h>
 #include <iostream>
@@ -13,6 +16,8 @@
 #include <pcl/filters/extract_indices.h>
 
 namespace YAML {
+	// explicit specialization for Eigen::Matrix4f
+	// used when load reference transformations
 	template<>
 	struct convert<Eigen::Matrix4f> {
 		static Node encode(const Eigen::Matrix4f& mat) {
@@ -42,10 +47,10 @@ public:
 	~ReferenceDataGenerator() {};
 
 	bool generatePointCloudWithRef(std::string pcd_path, std::string output_path, int num_pcd) {
-
-		srand(time(NULL));
-
 		pcl::PointCloud<PointType> cloud_source;
+
+		// update seed
+		srand(time(NULL));
 
 		if (pcd_path.find(".pcd") != std::string::npos) {
 			if (pcl::io::loadPCDFile(pcd_path, cloud_source) < 0) {
@@ -60,7 +65,7 @@ public:
 
 		PointType centroid;
 		pcl::computeCentroid(cloud_source, centroid);
-
+		// move the point cloud to the origin of the coordinate system
 		for (auto &point : cloud_source) {
 			point.x -= centroid.x;
 			point.y -= centroid.y;
@@ -109,18 +114,21 @@ public:
 				* Eigen::AngleAxisf(euler(0), Eigen::Vector3f::UnitZ()));
 			pcl::PointCloud<PointType> cloud_source_transformed;
 
+			// rotate the source point cloud
 			pcl::transformPointCloud(cloud_source, cloud_source_transformed, Eigen::Vector3f::Zero(), q);
 
 			if (add_noise == "y") {
 				std::cout << "Add noise ... \n";
 				pcl::PointIndices::Ptr inliers(new pcl::PointIndices());
 				pcl::ExtractIndices<PointType> extract;
+				// randomly sample a quadrant
 				int quadrant = static_cast<int>(8.0*rand() / (RAND_MAX + 1.0)) + 1;
 				for (int i = 0; i < cloud_source_transformed.size(); i++)
 				{
 					PointType& point = cloud_source_transformed.points[i];
 					bool should_remove = (point.x > 0) && (point.y > 0) && (point.z > 0);
 
+					// randomly mask a quadrant
 					switch (quadrant) {
 					case 1: should_remove = (point.x > 0) && (point.y > 0) && (point.z > 0); break;
 					case 2: should_remove = (point.x < 0) && (point.y > 0) && (point.z > 0); break;
@@ -136,6 +144,7 @@ public:
 					if (should_remove)
 						inliers->indices.push_back(i);
 					else {
+						// add gaussian noise
 						std::default_random_engine generator;
 						std::normal_distribution<double> distribution(0, noise_std);
 						point.x += distribution(generator);
@@ -149,6 +158,7 @@ public:
 				extract.filter(cloud_source_transformed);
 			}
 
+			// move the source point cloud
 			pcl::transformPointCloud(cloud_source_transformed, cloud_source_transformed, t, Eigen::Quaternionf::Identity());
 
 			//pcl::transformPointCloud(cloud_source, cloud_source_transformed, transform);
@@ -164,10 +174,10 @@ public:
 			ref_trans[node_name.c_str()] = transform;
 			parameter["output_file"].push_back(pcd_name);
 		}
-
+		// save reference transformations in yaml
 		ref_trans_fout << ref_trans;
 		ref_trans_fout.close();
-
+		// save info.yaml
 		parameter_fout << parameter;
 		parameter_fout.close();
 		return true;

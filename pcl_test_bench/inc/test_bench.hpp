@@ -26,9 +26,6 @@ class TestBench
 public:
 	typedef boost::shared_ptr<TestBench<PointType>> Ptr;
 
-	inline Ptr
-		makeShared() const { return Ptr(this); }
-
 	/**
 	* \brief constructor indicate new class
 	*/
@@ -54,7 +51,7 @@ public:
 		loadTgtFromPCDFile(std::vector<std::string>(pcd_file_paths.begin() + 1, pcd_file_paths.end()));
 		if (has_ref_transformation)
 			loadRefTransformation(ref_trans_path);
-		loadCandidateConfig();
+		loadCandidateConfig(); // candidate name load here
 	}
 
 	/**
@@ -82,69 +79,6 @@ public:
 		visualizer_ptr->close();
 	}
 
-	/**
-	* \brief save all test results
-	*/
-	void saveErrorResultsCsv(std::string path)
-	{
-		pcl::console::print_info("[TESTBENCH] Save result csv...\n");
-		std::ofstream result_file(path +"resultError.csv", std::ios::out);
-		result_file.setf(std::ios::fixed, std::ios::floatfield);
-		//result_file.precision(0);
-		result_file <<reg_candidate_name << std::endl
-			<< "name" << ","
-			<< "error_yaw" << ","
-			<< "error_pitch" << ","
-			<< "error_roll" << ","
-			<< "error_x" << ","
-			<< "error_y" << ","
-			<< "error_z" << ","
-			<< "converge" << ","
-			<< "time_cost" << ","
-			<< "src_points" << ","
-			<< "tgt_points" << ","
-			<< "fitness" << ","
-			<< "file_path" << ","
-			<< std::endl;
-		int idx = 1;
-		for (auto &result : results) {
-			result_file << "transformation_" + std::to_string(idx++) << ",";
-			result_file.precision(6);
-			result_file 
-				<< result.error_euler(0) << ","
-				<< result.error_euler(1) << ","
-				<< result.error_euler(2) << ","
-				<< result.error_trans(0) << ","
-				<< result.error_trans(1) << ","
-				<< result.error_trans(2) << ","
-				<< (result.is_converged?"true":"false") << ","
-				<< result.time_cost << ","
-				<< result.point_size_src << ","
-				<< result.point_size_tgt << ","
-				<< result.fitness << ","
-				<< result.pcd_file << ","
-				<< std::endl;
-		}
-		result_file.close();
-	}
-
-	void saveRegPCD(std::string path) {
-		pcl::console::print_info("[TESTBENCH] Save result pcd...\n");
-		pcl::io::savePCDFileBinary(path + "source.pcd", cloud_src);
-		int idx = 1;
-		for (auto &result : results) {
-			pcl::io::savePCDFileBinary(path + "reg_"+std::to_string(idx)+".pcd", *result.cloud_reg_ptr);
-			idx++;
-		}
-	}
-
-
-	void saveResult() {
-		result_output_path = result_output_path_root + reg_candidate_name + "/";
-		boost::filesystem::create_directories(boost::filesystem::path(result_output_path));
-		saveErrorResultsCsv(result_output_path);
-		saveRegPCD(result_output_path);
-	}
 
 protected:
 	YAML::Node cfg_file;
@@ -162,7 +96,7 @@ protected:
 	/**
 	 * \brief load config for candidate, must be define by user(registration algorithm)
 	 */
-	virtual void loadCandidateConfig() = 0 {}
+	virtual void loadCandidateConfig() = 0;
 
 	/**
 	 * \brief do registration for A pair of point cloud, must be defined by user
@@ -210,6 +144,9 @@ private:
 	std::vector<Result> results; // all registration result
 	pcl::StopWatch stop_watch;
 
+	/**
+	* \brief load source cloud
+	*/
 	void loadSrcFromPCDFile(const std::string &pcd_path)
 	{
 		pcl::PointCloud<PointType> pcd;
@@ -224,6 +161,9 @@ private:
 		pcl::console::print_info("[TESTBENCH] Load source point cloud: %s, size: %d\n", pcd_path.c_str(), pcd.size());
 	}
 
+	/**
+	 * \brief load target clouds
+	 */
 	void loadTgtFromPCDFile(const std::vector<std::string> &pcd_paths)
 	{
 		for (auto &path : pcd_paths)
@@ -243,6 +183,10 @@ private:
 		}
 	}
 
+
+	/**
+	* \brief load reference transformations
+	*/
 	void loadRefTransformation(std::string path)
 	{
 		std::ifstream fin(path);
@@ -280,6 +224,9 @@ private:
 		clouds_tgt_ptr.push_back(clouds_tgt.back().makeShared());
 	}
 
+	/**
+	* \brief preprocessing / down sampling
+	*/
 	void preprocessPointCloud()
 	{
 		pcl::VoxelGrid<PointType> grid;
@@ -298,10 +245,13 @@ private:
 			grid.filter(clouds_tgt_filtered.back());
 			clouds_tgt_filtered_ptr.push_back(clouds_tgt_filtered.back().makeShared());
 			pcl::console::print_info("[TESTBENCH] Filtered target point cloud %d size: %d / %d\n",
-				idx++,clouds_tgt_filtered.back().size(), cloud_ptr->size());
+				idx++, clouds_tgt_filtered.back().size(), cloud_ptr->size());
 		}
 	}
 
+	/**
+	* \brief compute result of the registrations and show console
+	*/
 	void computeResult()
 	{
 		pcl::console::print_info("\n[TESTBENCH] Algorithm: %s \n", reg_candidate_name.c_str());
@@ -312,7 +262,7 @@ private:
 			Eigen::Matrix4f ref_transformation = result.ref_transformation;
 			Eigen::Matrix4f error_transformation = ref_transformation * final_transformation.inverse();
 			Eigen::Vector3f error_trans;
-			Eigen::Vector3f error_euler = 180.0/M_PI*rot2EulerZYX(error_transformation.block<3, 3>(0, 0)); // deg
+			Eigen::Vector3f error_euler = 180.0 / M_PI * rot2EulerZYX(error_transformation.block<3, 3>(0, 0)); // deg
 			Eigen::Quaternionf error_q(error_transformation.block<3, 3>(0, 0));
 			results[i].error_euler = error_euler; // deg
 			result.error_quat = error_q;
@@ -324,7 +274,7 @@ private:
 			pcl::console::print_info("R = | %6.3f %6.3f %6.3f | \n", T(1, 0), T(1, 1), T(1, 2));
 			pcl::console::print_info("    | %6.3f %6.3f %6.3f | \n", T(2, 0), T(2, 1), T(2, 2));
 			pcl::console::print_info("t = [ %0.3f, %0.3f, %0.3f ]\n", T(0, 3), T(1, 3), T(2, 3));
-			
+
 			if (has_ref_transformation)
 			{
 				if (result.is_converged)
@@ -350,7 +300,7 @@ private:
 			}
 
 			pcl::console::print_info("Fitness score: %.6f (m)\n", result.fitness);
-			
+
 			pcl::console::print_info("Time cost: %.4f (s)\n", result.time_cost);
 
 			pcl::console::print_info("Point cloud size: src=%d, tgt=%d\n", result.point_size_src, result.point_size_tgt);
@@ -359,6 +309,10 @@ private:
 		}
 	}
 
+	/**
+	* \brief rotation matrix to yaw-pitch-roll euler angle
+	*        signular by pitch = +-pi/2
+	*/
 	Eigen::Vector3f rot2EulerZYX(Eigen::Matrix3f rot)
 	{
 		Eigen::Vector3f euler;
@@ -368,6 +322,9 @@ private:
 		return euler;
 	}
 
+	/**
+	* \brief show point cloud in left view port, show source and all targets
+	*/
 	template <typename T>
 	void vizSrcTgt() {
 		pcl::visualization::PointCloudColorHandlerCustom<T> src_h(cloud_src_ptr, 255, 0, 0);
@@ -390,7 +347,9 @@ private:
 		visualizer_ptr->spin();
 	}
 
-
+	/**
+	* \brief here will have compile error at gcc.
+	*/
 	template <>
 	void vizSrcTgt<pcl::PointXYZRGB>()
 	{
@@ -411,6 +370,9 @@ private:
 		visualizer_ptr->spin();
 	}
 
+	/**
+	* \brief add point cloud to right view port and show
+	*/
 	template <typename T>
 	void vizResultAddOne(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx) {
 		if (is_viz_result_first_loop)
@@ -437,7 +399,9 @@ private:
 		visualizer_ptr->spinOnce();
 	};
 
-
+	/**
+	* \brief compile error by gcc...
+	*/
 	template <>
 	void vizResultAddOne<pcl::PointXYZRGB>(boost::shared_ptr<pcl::PointCloud<PointType>> tgt_ptr, int tgt_idx)
 	{
@@ -467,7 +431,9 @@ private:
 		for (;;)
 			;
 	}
-
+	/**
+	* \brief create a visualizer
+	*/
 	void vizInit()
 	{
 		visualizer_ptr = boost::make_shared<pcl::visualization::PCLVisualizer>(*(new pcl::visualization::PCLVisualizer));
@@ -476,12 +442,15 @@ private:
 		visualizer_ptr->createViewPort(0.5, 0, 1.0, 1.0, view_port_2);
 	}
 
+	/**
+	* \brief align all target point clouds to the source.
+	*/
 	void doAlignAll()
 	{
 		pcl::PointCloud<PointType> reg_cloud, reg_cloud_filtered;
 		Eigen::Matrix4f final_transform;
 		pcl::console::print_info("[TESTBENCH] Start registration...\n");
-		for (int i = 0; i < clouds_tgt_filtered.size(); ++i){
+		for (int i = 0; i < clouds_tgt_filtered.size(); ++i) {
 			pcl::console::print_info("[TESTBENCH] Registration %d start...\n", i + 1);
 
 			stop_watch.reset();
@@ -507,4 +476,75 @@ private:
 			pcl::console::print_highlight("[TESTBENCH] Registration %d finished, time cost: %.4f[s]\n", i + 1, time_cost);
 		}
 	}
+
+	/**
+	* \brief save all test results in csv file.
+	*/
+	void saveErrorResultsCsv(std::string path)
+	{
+		pcl::console::print_info("[TESTBENCH] Save result csv...\n");
+		std::ofstream result_file(path + "resultError.csv", std::ios::out);
+		result_file.setf(std::ios::fixed, std::ios::floatfield);
+		//result_file.precision(0);
+		result_file << reg_candidate_name << std::endl
+			<< "name" << ","
+			<< "error_yaw" << ","
+			<< "error_pitch" << ","
+			<< "error_roll" << ","
+			<< "error_x" << ","
+			<< "error_y" << ","
+			<< "error_z" << ","
+			<< "converge" << ","
+			<< "time_cost" << ","
+			<< "src_points" << ","
+			<< "tgt_points" << ","
+			<< "fitness" << ","
+			<< "file_path" << ","
+			<< std::endl;
+		int idx = 1;
+		for (auto &result : results) {
+			result_file << "transformation_" + std::to_string(idx++) << ",";
+			result_file.precision(6);
+			result_file
+				<< result.error_euler(0) << ","
+				<< result.error_euler(1) << ","
+				<< result.error_euler(2) << ","
+				<< result.error_trans(0) << ","
+				<< result.error_trans(1) << ","
+				<< result.error_trans(2) << ","
+				<< (result.is_converged ? "true" : "false") << ","
+				<< result.time_cost << ","
+				<< result.point_size_src << ","
+				<< result.point_size_tgt << ","
+				<< result.fitness << ","
+				<< result.pcd_file << ","
+				<< std::endl;
+		}
+		result_file.close();
+	}
+
+	/**
+	* \brief save aligned point clouds in pcd files
+	*/
+	void saveRegPCD(std::string path) {
+		pcl::console::print_info("[TESTBENCH] Save result pcd...\n");
+		pcl::io::savePCDFileBinary(path + "source.pcd", cloud_src);
+		int idx = 1;
+		for (auto &result : results) {
+			pcl::io::savePCDFileBinary(path + "reg_" + std::to_string(idx) + ".pcd", *result.cloud_reg_ptr);
+			idx++;
+		}
+	}
+
+	/**
+	* \brief save all.
+	*/
+	void saveResult() {
+		result_output_path = result_output_path_root + reg_candidate_name + "/";
+		boost::filesystem::create_directories(boost::filesystem::path(result_output_path));
+		saveErrorResultsCsv(result_output_path);
+		saveRegPCD(result_output_path);
+	}
 };
+
+

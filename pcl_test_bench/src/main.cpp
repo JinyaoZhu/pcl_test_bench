@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <conio.h>
 #include <ref_data_generator.hpp>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
@@ -13,7 +12,7 @@
 
 typedef pcl::PointXYZ PointType;
 
-
+// simple point cloud viewer
 void cloudViewer() {
 	std::string point_cloud_path;
 	std::cout << "Point cloud path: ";
@@ -37,6 +36,7 @@ void cloudViewer() {
 	}
 }
 
+// generate point clouds with reference transformation and nosie
 void refCloudGenerator() {
 	std::string src_cloud_path;
 	std::string output_path;
@@ -123,7 +123,5 @@ int main(int argc, char **argv)
 		}
 	} while (!is_finished);
 	
-	//std::cout << "Press any key to continue ...\n";
-	//_getch();
 	return 0;
 }
