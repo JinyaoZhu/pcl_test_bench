@@ -80,7 +80,8 @@ public:
 		typename pcl::PointCloud<PointType>::Ptr src_cloud_ptr = src_cloud.makeShared();
 		typename pcl::PointCloud<PointType>::Ptr tgt_cloud_ptr = tgt_cloud.makeShared();
 
-
+		pcl::StopWatch stop_watch;
+		stop_watch.reset();
 		// Estimate the normals and the FPFH features for the source cloud
 		norm_est.setInputCloud(src_cloud_ptr);
 		norm_est.compute(norm_est_src);
@@ -95,9 +96,8 @@ public:
 
 		fpfh_est.setInputCloud(tgt_cloud_ptr);
 		fpfh_est.setInputNormals(norm_est_tgt.makeShared());
-		//stop_watch.reset();
 		fpfh_est.compute(features_tgt);
-		//pcl::console::print_info("FPFH compute time: %.5f (s)\n", stop_watch.getTimeSeconds());
+		pcl::console::print_info("[SCP] Feature compute time: %.5f (s)\n", stop_watch.getTimeSeconds());
 
 		scp_reg.setInputSource(src_cloud_ptr);
 		scp_reg.setInputTarget(tgt_cloud_ptr);

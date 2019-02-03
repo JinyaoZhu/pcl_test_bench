@@ -12,6 +12,7 @@ class Benchmark:
     def plotRotBM(self):
         fig_name = "BenchmarkRot"
         fig  = plt.figure(fig_name,figsize=(4+(4.0/3)*(self.num_tester/3),3+(self.num_tester/3)))
+        # fig  = plt.figure(fig_name,figsize=(8,6))
         colors = matplotlib.cm.rainbow(np.linspace(0, 1, self.num_tester))
         widths = 1
         positions = np.array([1,1+2+self.num_tester,1+2*(2+self.num_tester)])
@@ -34,6 +35,7 @@ class Benchmark:
     def plotTransBM(self):
         fig_name = "BenchmarkTrans"
         fig  = plt.figure(fig_name,figsize=(4+(4.0/3)*(self.num_tester/3),3+(self.num_tester/3)))
+        # fig  = plt.figure(fig_name,figsize=(8,6))
         colors = matplotlib.cm.rainbow(np.linspace(0, 1, self.num_tester))
         widths = 1
         positions = np.array([1,1+2+self.num_tester,1+2*(2+self.num_tester)])
@@ -56,6 +58,7 @@ class Benchmark:
     def plotTimeCostBM(self):
         fig_name = "BenchmarkTimeCost"
         fig  = plt.figure(fig_name,figsize=(4+(4.0/3)*(self.num_tester/3),3+(self.num_tester/3)))
+        # fig  = plt.figure(fig_name,figsize=(8,6))
         colors = matplotlib.cm.rainbow(np.linspace(0, 1, self.num_tester))
         widths = 1
         positions = np.array([1])
@@ -68,7 +71,7 @@ class Benchmark:
             legend_elements.append(Patch(facecolor=colors[i], edgecolor='k',label=tester.name))
         plt.xlim(0,positions[-1] + self.num_tester*widths)
         plt.xticks(positions+(self.num_tester-1)*widths/2,
-        ['Source point size = %i, Target avg. point size = %i'%(tester.src_points[0],tester.tgt_points_mean)])
+        ['Target point size = %i, Source avg. point size = %i'%(tester.tgt_points[0],tester.src_points_mean)])
         plt.ylabel('Time(s)')
         plt.title('Time Cost (%i runs)' % tester.index.size)
         plt.legend(handles=legend_elements, loc='best')

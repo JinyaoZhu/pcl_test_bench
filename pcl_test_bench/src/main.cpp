@@ -3,6 +3,7 @@
 #include <ref_data_generator.hpp>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
+#include <pcl/visualization/pcl_visualizer.h>
 
 #include <scp_test.hpp>
 #include <icp_test.hpp>
@@ -17,7 +18,7 @@ void cloudViewer() {
 	std::string point_cloud_path;
 	std::cout << "Point cloud path: ";
 	std::cin >> point_cloud_path;
-	pcl::PointCloud<pcl::PointXYZ> cloud;
+	pcl::PointCloud<PointType> cloud;
 	if (point_cloud_path.find(".pcd") != std::string::npos) {
 		if (pcl::io::loadPCDFile(point_cloud_path, cloud) < 0) {
 			return;
@@ -28,26 +29,34 @@ void cloudViewer() {
 			return;
 		}
 	}
-	pcl::visualization::CloudViewer viewer("Cloud Viewer");
-	viewer.showCloud(cloud.makeShared());
+
+	pcl::visualization::PCLVisualizer viewer = pcl::visualization::PCLVisualizer("Cloud Viewer");
+	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> single_color(cloud.makeShared(), 0, 0, 0);
+	viewer.setBackgroundColor(1, 1, 1);
+	viewer.addPointCloud<pcl::PointXYZ>(cloud.makeShared(), single_color, "sample cloud");
+	viewer.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud");
+	viewer.addCoordinateSystem(1.0);
+	viewer.initCameraParameters();
 	pcl::console::print_info("Press q to quit.");
 	while (!viewer.wasStopped())
-	{
+	{	
+		viewer.spinOnce(100);
 	}
+	viewer.close();
 }
 
 // generate point clouds with reference transformation and nosie
 void refCloudGenerator() {
-	std::string src_cloud_path;
+	std::string cloud_path;
 	std::string output_path;
 	int num_trans;
 
-	std::cout << "Source .pcd/.ply file(eg: bun0.pcd bun0.ply): ";
-	std::cin >> src_cloud_path;
-	while (src_cloud_path.find(".pcd") == std::string::npos && src_cloud_path.find(".ply") == std::string::npos) {
-		std::cout << "Invalid source file type." << "\n";
-		std::cout << "Source .pcd/.ply file(eg: bun0.pcd bun0.ply): ";
-		std::cin >> src_cloud_path;
+	std::cout << "Target .pcd/.ply file(eg: bun0.pcd bun0.ply): ";
+	std::cin >> cloud_path;
+	while (cloud_path.find(".pcd") == std::string::npos && cloud_path.find(".ply") == std::string::npos) {
+		std::cout << "Invalid file type." << "\n";
+		std::cout << "Target .pcd/.ply file(eg: bun0.pcd bun0.ply): ";
+		std::cin >> cloud_path;
 	}
 
 	std::cout << "Output path(eg: ref/): ";
@@ -61,7 +70,7 @@ void refCloudGenerator() {
 	std::cout << "Number of transformations: ";
 	std::cin >> num_trans;
 	ReferenceDataGenerator<PointType> data_gen;
-	data_gen.generatePointCloudWithRef(src_cloud_path, output_path, num_trans);
+	data_gen.generatePointCloudWithRef(cloud_path, output_path, num_trans);
 }
 
 

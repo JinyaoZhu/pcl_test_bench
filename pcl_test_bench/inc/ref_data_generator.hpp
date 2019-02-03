@@ -1,5 +1,5 @@
 /**
-* Point cloud generator with reference transformations and artifical noise
+* Point cloud generator with reference transformations and artifical noise and mask
 */
 #pragma	once
 #include <yaml-cpp/yaml.h>
@@ -47,26 +47,26 @@ public:
 	~ReferenceDataGenerator() {};
 
 	bool generatePointCloudWithRef(std::string pcd_path, std::string output_path, int num_pcd) {
-		pcl::PointCloud<PointType> cloud_source;
+		pcl::PointCloud<PointType> cloud_target;
 
 		// update seed
 		srand(time(NULL));
 
 		if (pcd_path.find(".pcd") != std::string::npos) {
-			if (pcl::io::loadPCDFile(pcd_path, cloud_source) < 0) {
+			if (pcl::io::loadPCDFile(pcd_path, cloud_target) < 0) {
 				return false;
 			}
 		}
 		else if (pcd_path.find(".ply") != std::string::npos) {
-			if (pcl::io::loadPLYFile(pcd_path, cloud_source) < 0) {
+			if (pcl::io::loadPLYFile(pcd_path, cloud_target) < 0) {
 				return false;
 			}
 		}
 
 		PointType centroid;
-		pcl::computeCentroid(cloud_source, centroid);
+		pcl::computeCentroid(cloud_target, centroid);
 		// move the point cloud to the origin of the coordinate system
-		for (auto &point : cloud_source) {
+		for (auto &point : cloud_target) {
 			point.x -= centroid.x;
 			point.y -= centroid.y;
 			point.z -= centroid.z;
@@ -81,18 +81,38 @@ public:
 		YAML::Node ref_trans = YAML::Load("");
 		YAML::Node parameter = YAML::Load("");
 
-		double max_translation; // [m]
-		double max_angle; // [deg]
+		parameter["input file"] = pcd_path;
+
+
+		double max_translation_x; // [m]
+		double max_translation_y; // [m]
+		double max_translation_z; // [m]
+
+		double max_angle_yaw; // [deg]
+		double max_angle_pitch; // [deg]
+		double max_angle_roll; // [deg]
 		std::string add_noise;
 
-		std::cout << "Maximal translation(m): ";
-		std::cin >> max_translation;
+		std::cout << "Maximal translation x(m): ";
+		std::cin >> max_translation_x;
+		std::cout << "Maximal translation y(m): ";
+		std::cin >> max_translation_y;
+		std::cout << "Maximal translation z(m): ";
+		std::cin >> max_translation_z;
 
-		std::cout << "Maximal rotation angle(deg): ";
-		std::cin >> max_angle;
+		std::cout << "Maximal rotation angle yaw(deg): ";
+		std::cin >> max_angle_yaw;
+		std::cout << "Maximal rotation angle pitch(deg): ";
+		std::cin >> max_angle_pitch;
+		std::cout << "Maximal rotation angle roll(deg): ";
+		std::cin >> max_angle_roll;
 
-		parameter["max_translation(m)"] = max_translation;
-		parameter["max_rotation(deg)"] = max_angle;
+		parameter["max_translation_x(m)"] = max_translation_x;
+		parameter["max_translation_y(m)"] = max_translation_y;
+		parameter["max_translation_z(m)"] = max_translation_z;
+		parameter["max_rotation_yaw(deg)"] = max_angle_yaw;
+		parameter["max_rotation_pitch(deg)"] = max_angle_pitch;
+		parameter["max_rotation_roll(deg)"] = max_angle_roll;
 		
 		std::cout << "Add noise to point clouds?(y/n):";
 		std::cin >> add_noise;
@@ -101,21 +121,26 @@ public:
 		if (add_noise == "y") {
 			std::cout << "noise std(m):";
 			std::cin >> noise_std;
+			parameter["Add noise"] = "true";
 			parameter["noise_std(m)"] = noise_std;
 		}
+		else {
+			parameter["Add noise"] = "false";
+		}
 
-		pcl::io::savePCDFileBinary(output_path + "trans_0.pcd", cloud_source);
+		pcl::io::savePCDFileBinary(output_path + "trans_0.pcd", cloud_target);
 		parameter["output_file"].push_back(output_path + "trans_0.pcd");
 		for (int i = 0; i < num_pcd; ++i) {
-			Eigen::Vector3f t = max_translation * Eigen::Vector3f::Random();
-			Eigen::Vector3f euler = (M_PI/180)*max_angle * Eigen::Vector3f::Random();
+			Eigen::Vector3f t = Eigen::Vector3f(max_translation_x, max_translation_y, max_translation_z).cwiseProduct(Eigen::Vector3f::Random());
+			Eigen::Vector3f euler = (M_PI/180)*
+			  Eigen::Vector3f(max_angle_yaw, max_angle_pitch, max_angle_roll).cwiseProduct(Eigen::Vector3f::Random());
 			Eigen::Quaternionf q(Eigen::AngleAxisf(euler(2), Eigen::Vector3f::UnitX())
 				* Eigen::AngleAxisf(euler(1), Eigen::Vector3f::UnitY())
 				* Eigen::AngleAxisf(euler(0), Eigen::Vector3f::UnitZ()));
-			pcl::PointCloud<PointType> cloud_source_transformed;
+			pcl::PointCloud<PointType> cloud_target_transformed;
 
-			// rotate the source point cloud
-			pcl::transformPointCloud(cloud_source, cloud_source_transformed, Eigen::Vector3f::Zero(), q);
+			// rotate the target point cloud
+			pcl::transformPointCloud(cloud_target, cloud_target_transformed, Eigen::Vector3f::Zero(), q);
 
 			if (add_noise == "y") {
 				std::cout << "Add noise ... \n";
@@ -123,9 +148,9 @@ public:
 				pcl::ExtractIndices<PointType> extract;
 				// randomly sample a quadrant
 				int quadrant = static_cast<int>(8.0*rand() / (RAND_MAX + 1.0)) + 1;
-				for (int i = 0; i < cloud_source_transformed.size(); i++)
+				for (int i = 0; i < cloud_target_transformed.size(); i++)
 				{
-					PointType& point = cloud_source_transformed.points[i];
+					PointType& point = cloud_target_transformed.points[i];
 					bool should_remove = (point.x > 0) && (point.y > 0) && (point.z > 0);
 
 					// randomly mask a quadrant
@@ -152,25 +177,26 @@ public:
 						point.z += distribution(generator);
 					}
 				}
-				extract.setInputCloud(cloud_source_transformed.makeShared());
+				extract.setInputCloud(cloud_target_transformed.makeShared());
 				extract.setIndices(inliers);
 				extract.setNegative(true);
-				extract.filter(cloud_source_transformed);
+				extract.filter(cloud_target_transformed);
 			}
 
 			// move the source point cloud
-			pcl::transformPointCloud(cloud_source_transformed, cloud_source_transformed, t, Eigen::Quaternionf::Identity());
+			pcl::transformPointCloud(cloud_target_transformed, cloud_target_transformed, t, Eigen::Quaternionf::Identity());
 
-			//pcl::transformPointCloud(cloud_source, cloud_source_transformed, transform);
 			Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
 			transform.block<3, 3>(0, 0) = q.toRotationMatrix();
 			transform.block<3, 1>(0, 3) = t;
+			// p_target = T*p_source
+			transform = transform.inverse();
 			std::cout << "Generate " <<"transformation" << i+1 << "=\n" << transform << "\n\n";
 
 			std::string node_name = "transformation_" + std::to_string(i + 1);
 			std::string pcd_name = output_path + "trans_" + std::to_string(i + 1) + ".pcd";
 
-			pcl::io::savePCDFileBinary(pcd_name, cloud_source_transformed);
+			pcl::io::savePCDFileBinary(pcd_name, cloud_target_transformed);
 			ref_trans[node_name.c_str()] = transform;
 			parameter["output_file"].push_back(pcd_name);
 		}

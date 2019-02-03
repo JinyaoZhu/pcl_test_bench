@@ -24,7 +24,7 @@ class Tester:
         self.time_cost = data['time_cost']
         self.src_points = data['src_points']
         self.tgt_points = data['tgt_points']
-        self.tgt_points_mean = np.mean(self.tgt_points)
+        self.src_points_mean = np.mean(self.src_points)
         self.file_path = data['file_path']
         self.error_euler_mean = np.mean(self.error_euler,axis=1)
         self.error_trans_mean = np.mean(self.error_trans,axis=1)
@@ -55,7 +55,7 @@ class Tester:
         plt.xlabel('n th run')
         plt.ylabel('Error(deg)')
         plt.title('Rotational Error(absolute)')
-        plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
+        plt.xticks(self.index+bar_width, np.array([str(x) if x%(5 if self.index.size<=50 else 10)==0 else "" for x in self.index]))
         plt.legend(loc='best')
         # plt.grid(linestyle=':')
         plt.tight_layout()
@@ -82,7 +82,7 @@ class Tester:
         plt.xlabel('n th run')
         plt.ylabel('Error(m)')
         plt.title('Translational Error(absolute)')
-        plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
+        plt.xticks(self.index+bar_width, np.array([str(x) if x%(5 if self.index.size<=50 else 10)==0 else "" for x in self.index]))
         plt.legend(loc='best')
         # plt.grid(linestyle=':')
         plt.tight_layout()
@@ -101,7 +101,7 @@ class Tester:
             plt.xlabel('n th run')
             plt.ylabel('Time(s)')
             plt.title('Time Cost (avg.=%.4fs)'%np.mean(self.time_cost))
-            plt.xticks(self.index, np.array([str(x) if x%5==0 else "" for x in self.index]))
+            plt.xticks(self.index, np.array([str(x) if x%(5 if self.index.size<=50 else 10)==0 else "" for x in self.index]))
             plt.axhline(np.mean(self.time_cost),color='r', linestyle='--')
             # plt.grid(linestyle=':')
             plt.tight_layout()
@@ -160,20 +160,20 @@ class Tester:
         plt.close()
 
     def plotPointSize(self):
-        fig_name = self.name + " TgtPointSize"
+        fig_name = self.name + " SrcPointSize"
         fig  = plt.figure(fig_name,figsize=(4,3))
         bar_width = 0.5
         opacity = 0.8
-        rects1 = plt.bar(self.index + bar_width, self.tgt_points, bar_width,
+        rects1 = plt.bar(self.index + bar_width, self.src_points, bar_width,
                         alpha=opacity,
                         color=['b'if x=='true'else'grey' for x in self.is_converge],
-                        label='target')
+                        label='source')
         plt.xlabel('n th run')
         plt.ylabel('size (point)')
-        plt.title('Target Size(Source Size = %i)'%self.src_points[0])
-        plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
+        plt.title('Source Size(Target Size = %i)'%self.tgt_points[0])
+        plt.xticks(self.index+bar_width, np.array([str(x) if x%(5 if self.index.size<=50 else 10)==0 else "" for x in self.index]))
         # plt.grid(linestyle=':')
-        plt.axhline(np.mean(self.tgt_points),color='r', linestyle='--')
+        plt.axhline(np.mean(self.src_points),color='r', linestyle='--')
         plt.tight_layout()
         fig.savefig(self.name+'/'+fig_name, dpi=300)
         plt.close()
@@ -188,9 +188,9 @@ class Tester:
                         color=['b'if x=='true'else'grey' for x in self.is_converge],
                         label='')
         plt.xlabel('n th run')
-        plt.ylabel('Fitness (m)')
-        plt.title('Fitness Score (avg.=%.4fm)'%(np.mean(self.fitness)))
-        plt.xticks(self.index+bar_width, np.array([str(x) if x%5==0 else "" for x in self.index]))
+        plt.ylabel('Fitness ($\mathregular{m^2}$)')
+        plt.title('Fitness Score (avg.=%.4f$\mathregular{m^2}$)'%(np.mean(self.fitness)))
+        plt.xticks(self.index+bar_width, np.array([str(x) if x%(5 if self.index.size<=50 else 10)==0 else "" for x in self.index]))
         # plt.grid(linestyle=':')
         plt.axhline(np.mean(self.fitness),color='r', linestyle='--')
         plt.tight_layout()

@@ -43,6 +43,12 @@ class TemplateTest : public TestBench<PointType>
         return true; // only return true if the registration is converge
     }
 
+    double getFitness() {
+        /*************start your code below*************/
+        // return fitness score of this registration
+		return 0.0;
+	}
+
   private:
     std::string alg_name; // algorithm name, this will pass to the test bench
 };

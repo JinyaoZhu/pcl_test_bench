@@ -27,9 +27,11 @@ public:
 		alg_cfg = YAML::LoadFile(path);
 
 		int icp_max_iter = alg_cfg["icp_max_iter"].as<int>();
-		icp.setMaximumIterations(icp_max_iter);
 		float max_corr_dis = alg_cfg["max_corr_dis"].as<float>();
+		float eps = alg_cfg["transformation_esp"].as<float>();
+		icp.setMaximumIterations(icp_max_iter);
 		icp.setMaxCorrespondenceDistance(max_corr_dis);
+		icp.setTransformationEpsilon(eps);
 	}
 
 	bool doAlignOnce(const pcl::PointCloud<PointType> &src_cloud, const pcl::PointCloud<PointType> &tgt_cloud,
