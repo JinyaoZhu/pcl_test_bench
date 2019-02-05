@@ -6,6 +6,8 @@
 *.user
 *.userosscache
 *.sln.docstates
+pcl_test_bench/ref/
+pcl_test_bench/res/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
