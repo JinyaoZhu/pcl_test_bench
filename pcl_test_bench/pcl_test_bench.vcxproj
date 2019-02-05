@@ -19,16 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\gicp_test.hpp" />
-    <ClInclude Include="inc\icpnl_test.hpp" />
-    <ClInclude Include="inc\icp_test.hpp" />
-    <ClInclude Include="inc\ndt_test.hpp" />
-    <ClInclude Include="inc\ref_data_generator.hpp" />
-    <ClInclude Include="inc\scp_test.hpp" />
-    <ClInclude Include="inc\test_bench.hpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
+    <ClInclude Include="src\inc\gicp_test.hpp" />
+    <ClInclude Include="src\inc\icpnl_test.hpp" />
+    <ClInclude Include="src\inc\icp_test.hpp" />
+    <ClInclude Include="src\inc\ndt_test.hpp" />
+    <ClInclude Include="src\inc\ref_data_generator.hpp" />
+    <ClInclude Include="src\inc\scp_test.hpp" />
+    <ClInclude Include="src\inc\test_bench.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -97,9 +97,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\lib;C:\Program Files\PCL 1.8.1\lib;C:\Program Files\PCL 1.8.1\3rdParty\Boost\lib;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\lib;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\lib;C:\Program Files\PCL 1.8.1\3rdParty\VTK\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src\lib;C:\Program Files\PCL 1.8.1\lib;C:\Program Files\PCL 1.8.1\3rdParty\Boost\lib;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\lib;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\lib;C:\Program Files\PCL 1.8.1\3rdParty\VTK\lib;$(LibraryPath)</LibraryPath>
     <SourcePath>C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src;$(SourcePath)</SourcePath>
-    <IncludePath>C:\Program Files\PCL 1.8.1\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.1\3rdParty\Boost\include\boost-1_64;C:\Program Files\PCL 1.8.1\include\pcl-1.8;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.1\3rdParty\VTK\include\vtk-8.0;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\include;C:\Program Files\OpenNI2\Include;C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\inc\;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\PCL 1.8.1\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.1\3rdParty\Boost\include\boost-1_64;C:\Program Files\PCL 1.8.1\include\pcl-1.8;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.1\3rdParty\VTK\include\vtk-8.0;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\include;C:\Program Files\OpenNI2\Include;C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src\inc\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

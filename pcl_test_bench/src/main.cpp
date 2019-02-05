@@ -59,11 +59,11 @@ void refCloudGenerator() {
 		std::cin >> cloud_path;
 	}
 
-	std::cout << "Output path(eg: ref/): ";
+	std::cout << "Output path(eg: ted/ref/): ";
 	std::cin >> output_path;
-	while (output_path.find("/") != (output_path.size() - 1)) {
-		std::cout << "Invalid output path, output path must be a folder(eg: ref/)." << "\n";
-		std::cout << "Output path(eg: ref/): ";
+	while (output_path.find_last_of("/") != (output_path.size() - 1)) {
+		std::cout << "Invalid output path, output path must be a folder(eg: ted/ref/)." << "\n";
+		std::cout << "Output path(eg: ted/ref/): ";
 		std::cin >> output_path;
 	}
 

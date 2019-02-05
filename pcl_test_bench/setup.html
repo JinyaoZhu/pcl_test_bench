@@ -1,0 +1,652 @@
+<!DOCTYPE html><html><head>
+      <title>setup</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///C:\Users\jinyao\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.3.11\node_modules\@shd101wyy\mume\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      <style> 
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+ 
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview   ">
+      <h1 class="mume-header" id="pcl-installation-guide">PCL Installation Guide</h1>
+
+<h2 class="mume-header" id="environment">Environment:</h2>
+
+<p>Windows 10 + Visual Studio 2017  + PCL 1.8.1-AllInOne</p>
+<h2 class="mume-header" id="1-download-pcl-all-in-one-and-pdb-files">1. Download PCL all in one and pdb files</h2>
+
+<p>From <a href="https://github.com/PointCloudLibrary/pcl/releases">https://github.com/PointCloudLibrary/pcl/releases</a> and install.<br>
+Copy pdb files to C:\Program Files\PCL 1.8.1\bin.</p>
+<h2 class="mume-header" id="2-setup-environment-variable">2. Setup environment variable</h2>
+
+<p>Add to system environment path:<br>
+%PCL_ROOT%\bin;<br>
+%PCL_ROOT%\3rdParty\FLANN\bin;<br>
+%PCL_ROOT%\3rdParty\VTK\bin;<br>
+%PCL_ROOT%\Qhull\bin;<br>
+C:\Program Files\OpenNI2\Tools</p>
+<p><strong>reboot</strong>.</p>
+<h2 class="mume-header" id="3-setup-vs-project-for-pcl-libaray">3. Setup VS project for PCL Libaray</h2>
+
+<h3 class="mume-header" id="for-release-x64">For Release x64</h3>
+
+<p><strong>properties -&gt; VC++ Directoreis -&gt; Include Directories:</strong><br>
+C:\Program Files\PCL 1.8.1\3rdParty\Eigen\eigen3;C:\Program Files\PCL 1.8.1\3rdParty\Boost\include\boost-1_64;C:\Program Files\PCL 1.8.1\include\pcl-1.8;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\include;C:\Program Files\PCL 1.8.1\3rdParty\VTK\include\vtk-8.0;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\include;C:\Program Files\OpenNI2\Include;$(IncludePath)</p>
+<p><strong>properties -&gt; VC++ Directoreis -&gt; Libaray Directories:</strong><br>
+C:\Program Files\PCL 1.8.1\lib;C:\Program Files\PCL 1.8.1\3rdParty\Boost\lib;C:\Program Files\PCL 1.8.1\3rdParty\FLANN\lib;C:\Program Files\PCL 1.8.1\3rdParty\Qhull\lib;C:\Program Files\PCL 1.8.1\3rdParty\VTK\lib;$(LibraryPath)</p>
+<p><strong>properties -&gt; C/C++ -&gt; Preprocessor -&gt; Preprocessor Definitions:</strong><br>
+NDEBUG<br>
+_CONSOLE<br>
+_SCL_SECURE_NO_WARNINGS<br>
+_CRT_SECURE_NO_WARNINGS<br>
+_SILENCE_FPOS_SEEKPOS_DEPRECATION_WARNING<br>
+BOOST_TYPEOF_EMULATION</p>
+<p><strong>properties -&gt; Linker -&gt; Input -&gt; Additional Dependencies:</strong><br>
+pcl_common_release.lib<br>
+pcl_features_release.lib<br>
+pcl_filters_release.lib<br>
+pcl_io_ply_release.lib<br>
+pcl_io_release.lib<br>
+pcl_kdtree_release.lib<br>
+pcl_keypoints_release.lib<br>
+pcl_ml_release.lib<br>
+pcl_octree_release.lib<br>
+pcl_outofcore_release.lib<br>
+pcl_people_release.lib<br>
+pcl_recognition_release.lib<br>
+pcl_registration_release.lib<br>
+pcl_sample_consensus_release.lib<br>
+pcl_search_release.lib<br>
+pcl_segmentation_release.lib<br>
+pcl_stereo_release.lib<br>
+pcl_surface_release.lib<br>
+pcl_tracking_release.lib<br>
+pcl_visualization_release.lib<br>
+libboost_atomic-vc141-mt-1_64.lib<br>
+libboost_bzip2-vc141-mt-1_64.lib<br>
+libboost_chrono-vc141-mt-1_64.lib<br>
+libboost_container-vc141-mt-1_64.lib<br>
+libboost_context-vc141-mt-1_64.lib<br>
+libboost_coroutine-vc141-mt-1_64.lib<br>
+libboost_date_time-vc141-mt-1_64.lib<br>
+libboost_exception-vc141-mt-1_64.lib<br>
+libboost_fiber-vc141-mt-1_64.lib<br>
+libboost_filesystem-vc141-mt-1_64.lib<br>
+libboost_graph-vc141-mt-1_64.lib<br>
+libboost_graph_parallel-vc141-mt-1_64.lib<br>
+libboost_iostreams-vc141-mt-1_64.lib<br>
+libboost_locale-vc141-mt-1_64.lib<br>
+libboost_log-vc141-mt-1_64.lib<br>
+libboost_log_setup-vc141-mt-1_64.lib<br>
+libboost_math_c99-vc141-mt-1_64.lib<br>
+libboost_math_c99f-vc141-mt-1_64.lib<br>
+libboost_math_c99l-vc141-mt-1_64.lib<br>
+libboost_math_tr1-vc141-mt-1_64.lib<br>
+libboost_math_tr1f-vc141-mt-1_64.lib<br>
+libboost_math_tr1l-vc141-mt-1_64.lib<br>
+libboost_mpi-vc141-mt-1_64.lib<br>
+libboost_numpy-vc141-mt-1_64.lib<br>
+libboost_numpy3-vc141-mt-1_64.lib<br>
+libboost_prg_exec_monitor-vc141-mt-1_64.lib<br>
+libboost_program_options-vc141-mt-1_64.lib<br>
+libboost_python-vc141-mt-1_64.lib<br>
+libboost_python3-vc141-mt-1_64.lib<br>
+libboost_random-vc141-mt-1_64.lib<br>
+libboost_regex-vc141-mt-1_64.lib<br>
+libboost_serialization-vc141-mt-1_64.lib<br>
+libboost_signals-vc141-mt-1_64.lib<br>
+libboost_system-vc141-mt-1_64.lib<br>
+libboost_test_exec_monitor-vc141-mt-1_64.lib<br>
+libboost_thread-vc141-mt-1_64.lib<br>
+libboost_timer-vc141-mt-1_64.lib<br>
+libboost_type_erasure-vc141-mt-1_64.lib<br>
+libboost_unit_test_framework-vc141-mt-1_64.lib<br>
+libboost_wave-vc141-mt-1_64.lib<br>
+libboost_wserialization-vc141-mt-1_64.lib<br>
+libboost_zlib-vc141-mt-1_64.lib<br>
+vtkalglib-8.0.lib<br>
+vtkChartsCore-8.0.lib<br>
+vtkCommonColor-8.0.lib<br>
+vtkCommonComputationalGeometry-8.0.lib<br>
+vtkCommonCore-8.0.lib<br>
+vtkCommonDataModel-8.0.lib<br>
+vtkCommonExecutionModel-8.0.lib<br>
+vtkCommonMath-8.0.lib<br>
+vtkCommonMisc-8.0.lib<br>
+vtkCommonSystem-8.0.lib<br>
+vtkCommonTransforms-8.0.lib<br>
+vtkDICOMParser-8.0.lib<br>
+vtkDomainsChemistry-8.0.lib<br>
+vtkexoIIc-8.0.lib<br>
+vtkexpat-8.0.lib<br>
+vtkFiltersAMR-8.0.lib<br>
+vtkFiltersCore-8.0.lib<br>
+vtkFiltersExtraction-8.0.lib<br>
+vtkFiltersFlowPaths-8.0.lib<br>
+vtkFiltersGeneral-8.0.lib<br>
+vtkFiltersGeneric-8.0.lib<br>
+vtkFiltersGeometry-8.0.lib<br>
+vtkFiltersHybrid-8.0.lib<br>
+vtkFiltersHyperTree-8.0.lib<br>
+vtkFiltersImaging-8.0.lib<br>
+vtkFiltersModeling-8.0.lib<br>
+vtkFiltersParallel-8.0.lib<br>
+vtkFiltersParallelImaging-8.0.lib<br>
+vtkFiltersPoints-8.0.lib<br>
+vtkFiltersProgrammable-8.0.lib<br>
+vtkFiltersSelection-8.0.lib<br>
+vtkFiltersSMP-8.0.lib<br>
+vtkFiltersSources-8.0.lib<br>
+vtkFiltersStatistics-8.0.lib<br>
+vtkFiltersTexture-8.0.lib<br>
+vtkFiltersTopology-8.0.lib<br>
+vtkFiltersVerdict-8.0.lib<br>
+vtkfreetype-8.0.lib<br>
+vtkGeovisCore-8.0.lib<br>
+vtkgl2ps-8.0.lib<br>
+vtkhdf5-8.0.lib<br>
+vtkhdf5_hl-8.0.lib<br>
+vtkImagingColor-8.0.lib<br>
+vtkImagingCore-8.0.lib<br>
+vtkImagingFourier-8.0.lib<br>
+vtkImagingGeneral-8.0.lib<br>
+vtkImagingHybrid-8.0.lib<br>
+vtkImagingMath-8.0.lib<br>
+vtkImagingMorphological-8.0.lib<br>
+vtkImagingSources-8.0.lib<br>
+vtkImagingStatistics-8.0.lib<br>
+vtkImagingStencil-8.0.lib<br>
+vtkInfovisCore-8.0.lib<br>
+vtkInfovisLayout-8.0.lib<br>
+vtkInteractionImage-8.0.lib<br>
+vtkInteractionStyle-8.0.lib<br>
+vtkInteractionWidgets-8.0.lib<br>
+vtkIOAMR-8.0.lib<br>
+vtkIOCore-8.0.lib<br>
+vtkIOEnSight-8.0.lib<br>
+vtkIOExodus-8.0.lib<br>
+vtkIOExport-8.0.lib<br>
+vtkIOExportOpenGL-8.0.lib<br>
+vtkIOGeometry-8.0.lib<br>
+vtkIOImage-8.0.lib<br>
+vtkIOImport-8.0.lib<br>
+vtkIOInfovis-8.0.lib<br>
+vtkIOLegacy-8.0.lib<br>
+vtkIOLSDyna-8.0.lib<br>
+vtkIOMINC-8.0.lib<br>
+vtkIOMovie-8.0.lib<br>
+vtkIONetCDF-8.0.lib<br>
+vtkIOParallel-8.0.lib<br>
+vtkIOParallelXML-8.0.lib<br>
+vtkIOPLY-8.0.lib<br>
+vtkIOSQL-8.0.lib<br>
+vtkIOTecplotTable-8.0.lib<br>
+vtkIOVideo-8.0.lib<br>
+vtkIOXML-8.0.lib<br>
+vtkIOXMLParser-8.0.lib<br>
+vtkjpeg-8.0.lib<br>
+vtkjsoncpp-8.0.lib<br>
+vtklibharu-8.0.lib<br>
+vtklibxml2-8.0.lib<br>
+vtklz4-8.0.lib<br>
+vtkmetaio-8.0.lib<br>
+vtkNetCDF-8.0.lib<br>
+vtknetcdf_c++.lib<br>
+vtkoggtheora-8.0.lib<br>
+vtkParallelCore-8.0.lib<br>
+vtkpng-8.0.lib<br>
+vtkproj4-8.0.lib<br>
+vtkRenderingAnnotation-8.0.lib<br>
+vtkRenderingContext2D-8.0.lib<br>
+vtkRenderingContextOpenGL-8.0.lib<br>
+vtkRenderingCore-8.0.lib<br>
+vtkRenderingFreeType-8.0.lib<br>
+vtkRenderingGL2PS-8.0.lib<br>
+vtkRenderingImage-8.0.lib<br>
+vtkRenderingLabel-8.0.lib<br>
+vtkRenderingLIC-8.0.lib<br>
+vtkRenderingLOD-8.0.lib<br>
+vtkRenderingOpenGL-8.0.lib<br>
+vtkRenderingVolume-8.0.lib<br>
+vtkRenderingVolumeOpenGL-8.0.lib<br>
+vtksqlite-8.0.lib<br>
+vtksys-8.0.lib<br>
+vtktiff-8.0.lib<br>
+vtkverdict-8.0.lib<br>
+vtkViewsContext2D-8.0.lib<br>
+vtkViewsCore-8.0.lib<br>
+vtkViewsInfovis-8.0.lib<br>
+vtkzlib-8.0.lib<br>
+qhull_p.lib<br>
+qhull_r.lib<br>
+qhull.lib<br>
+qhullcpp.lib<br>
+qhullstatic.lib<br>
+qhullstatic_r.lib<br>
+flann.lib<br>
+flann_cpp.lib<br>
+flann_cpp_s.lib<br>
+flann_s.lib</p>
+<h3 class="mume-header" id="for-debug-x64">For Debug x64</h3>
+
+<p>same as Release, except <strong>Linker</strong>:<br>
+<strong>properties -&gt; Linker -&gt; Input -&gt; Additional Dependencies:</strong><br>
+vtknetcdf_c++-gd.lib<br>
+pcl_common_debug.lib<br>
+pcl_features_debug.lib<br>
+pcl_filters_debug.lib<br>
+pcl_io_ply_debug.lib<br>
+pcl_io_debug.lib<br>
+pcl_kdtree_debug.lib<br>
+pcl_keypoints_debug.lib<br>
+pcl_ml_debug.lib<br>
+pcl_octree_debug.lib<br>
+pcl_outofcore_debug.lib<br>
+pcl_people_debug.lib<br>
+pcl_recognition_debug.lib<br>
+pcl_registration_debug.lib<br>
+pcl_sample_consensus_debug.lib<br>
+pcl_search_debug.lib<br>
+pcl_segmentation_debug.lib<br>
+pcl_stereo_debug.lib<br>
+pcl_surface_debug.lib<br>
+pcl_tracking_debug.lib<br>
+pcl_visualization_debug.lib<br>
+libboost_atomic-vc141-mt-gd-1_64.lib<br>
+libboost_bzip2-vc141-mt-gd-1_64.lib<br>
+libboost_chrono-vc141-mt-gd-1_64.lib<br>
+libboost_container-vc141-mt-gd-1_64.lib<br>
+libboost_context-vc141-mt-gd-1_64.lib<br>
+libboost_coroutine-vc141-mt-gd-1_64.lib<br>
+libboost_date_time-vc141-mt-gd-1_64.lib<br>
+libboost_exception-vc141-mt-gd-1_64.lib<br>
+libboost_fiber-vc141-mt-gd-1_64.lib<br>
+libboost_filesystem-vc141-mt-gd-1_64.lib<br>
+libboost_graph-vc141-mt-gd-1_64.lib<br>
+libboost_graph_parallel-vc141-mt-gd-1_64.lib<br>
+libboost_iostreams-vc141-mt-gd-1_64.lib<br>
+libboost_locale-vc141-mt-gd-1_64.lib<br>
+libboost_log-vc141-mt-gd-1_64.lib<br>
+libboost_log_setup-vc141-mt-gd-1_64.lib<br>
+libboost_math_c99-vc141-mt-gd-1_64.lib<br>
+libboost_math_c99f-vc141-mt-gd-1_64.lib<br>
+libboost_math_c99l-vc141-mt-gd-1_64.lib<br>
+libboost_math_tr1-vc141-mt-gd-1_64.lib<br>
+libboost_math_tr1f-vc141-mt-gd-1_64.lib<br>
+libboost_math_tr1l-vc141-mt-gd-1_64.lib<br>
+libboost_mpi-vc141-mt-gd-1_64.lib<br>
+libboost_numpy3-vc141-mt-gd-1_64.lib<br>
+libboost_numpy-vc141-mt-gd-1_64.lib<br>
+libboost_prg_exec_monitor-vc141-mt-gd-1_64.lib<br>
+libboost_program_options-vc141-mt-gd-1_64.lib<br>
+libboost_python3-vc141-mt-gd-1_64.lib<br>
+libboost_python-vc141-mt-gd-1_64.lib<br>
+libboost_random-vc141-mt-gd-1_64.lib<br>
+libboost_regex-vc141-mt-gd-1_64.lib<br>
+libboost_serialization-vc141-mt-gd-1_64.lib<br>
+libboost_signals-vc141-mt-gd-1_64.lib<br>
+libboost_system-vc141-mt-gd-1_64.lib<br>
+libboost_test_exec_monitor-vc141-mt-gd-1_64.lib<br>
+libboost_thread-vc141-mt-gd-1_64.lib<br>
+libboost_timer-vc141-mt-gd-1_64.lib<br>
+libboost_type_erasure-vc141-mt-gd-1_64.lib<br>
+libboost_unit_test_framework-vc141-mt-gd-1_64.lib<br>
+libboost_wave-vc141-mt-gd-1_64.lib<br>
+libboost_wserialization-vc141-mt-gd-1_64.lib<br>
+libboost_zlib-vc141-mt-gd-1_64.lib<br>
+flann-gd.lib<br>
+flann_cpp-gd.lib<br>
+flann_cpp_s-gd.lib<br>
+flann_s-gd.lib<br>
+qhull_d.lib<br>
+qhullcpp_d.lib<br>
+qhullstatic_d.lib<br>
+qhullstatic_r_d.lib<br>
+qhull_p_d.lib<br>
+qhull_r_d.lib<br>
+vtkalglib-8.0-gd.lib<br>
+vtkChartsCore-8.0-gd.lib<br>
+vtkCommonColor-8.0-gd.lib<br>
+vtkCommonComputationalGeometry-8.0-gd.lib<br>
+vtkCommonCore-8.0-gd.lib<br>
+vtkCommonDataModel-8.0-gd.lib<br>
+vtkCommonExecutionModel-8.0-gd.lib<br>
+vtkCommonMath-8.0-gd.lib<br>
+vtkCommonMisc-8.0-gd.lib<br>
+vtkCommonSystem-8.0-gd.lib<br>
+vtkCommonTransforms-8.0-gd.lib<br>
+vtkDICOMParser-8.0-gd.lib<br>
+vtkDomainsChemistry-8.0-gd.lib<br>
+vtkexoIIc-8.0-gd.lib<br>
+vtkexpat-8.0-gd.lib<br>
+vtkFiltersAMR-8.0-gd.lib<br>
+vtkFiltersCore-8.0-gd.lib<br>
+vtkFiltersExtraction-8.0-gd.lib<br>
+vtkFiltersFlowPaths-8.0-gd.lib<br>
+vtkFiltersGeneral-8.0-gd.lib<br>
+vtkFiltersGeneric-8.0-gd.lib<br>
+vtkFiltersGeometry-8.0-gd.lib<br>
+vtkFiltersHybrid-8.0-gd.lib<br>
+vtkFiltersHyperTree-8.0-gd.lib<br>
+vtkFiltersImaging-8.0-gd.lib<br>
+vtkFiltersModeling-8.0-gd.lib<br>
+vtkFiltersParallel-8.0-gd.lib<br>
+vtkFiltersParallelImaging-8.0-gd.lib<br>
+vtkFiltersPoints-8.0-gd.lib<br>
+vtkFiltersProgrammable-8.0-gd.lib<br>
+vtkFiltersSelection-8.0-gd.lib<br>
+vtkFiltersSMP-8.0-gd.lib<br>
+vtkFiltersSources-8.0-gd.lib<br>
+vtkFiltersStatistics-8.0-gd.lib<br>
+vtkFiltersTexture-8.0-gd.lib<br>
+vtkFiltersTopology-8.0-gd.lib<br>
+vtkFiltersVerdict-8.0-gd.lib<br>
+vtkfreetype-8.0-gd.lib<br>
+vtkGeovisCore-8.0-gd.lib<br>
+vtkgl2ps-8.0-gd.lib<br>
+vtkhdf5-8.0-gd.lib<br>
+vtkhdf5_hl-8.0-gd.lib<br>
+vtkImagingColor-8.0-gd.lib<br>
+vtkImagingCore-8.0-gd.lib<br>
+vtkImagingFourier-8.0-gd.lib<br>
+vtkImagingGeneral-8.0-gd.lib<br>
+vtkImagingHybrid-8.0-gd.lib<br>
+vtkImagingMath-8.0-gd.lib<br>
+vtkImagingMorphological-8.0-gd.lib<br>
+vtkImagingSources-8.0-gd.lib<br>
+vtkImagingStatistics-8.0-gd.lib<br>
+vtkImagingStencil-8.0-gd.lib<br>
+vtkInfovisCore-8.0-gd.lib<br>
+vtkInfovisLayout-8.0-gd.lib<br>
+vtkInteractionImage-8.0-gd.lib<br>
+vtkInteractionStyle-8.0-gd.lib<br>
+vtkInteractionWidgets-8.0-gd.lib<br>
+vtkIOAMR-8.0-gd.lib<br>
+vtkIOCore-8.0-gd.lib<br>
+vtkIOEnSight-8.0-gd.lib<br>
+vtkIOExodus-8.0-gd.lib<br>
+vtkIOExport-8.0-gd.lib<br>
+vtkIOExportOpenGL-8.0-gd.lib<br>
+vtkIOGeometry-8.0-gd.lib<br>
+vtkIOImage-8.0-gd.lib<br>
+vtkIOImport-8.0-gd.lib<br>
+vtkIOInfovis-8.0-gd.lib<br>
+vtkIOLegacy-8.0-gd.lib<br>
+vtkIOLSDyna-8.0-gd.lib<br>
+vtkIOMINC-8.0-gd.lib<br>
+vtkIOMovie-8.0-gd.lib<br>
+vtkIONetCDF-8.0-gd.lib<br>
+vtkIOParallel-8.0-gd.lib<br>
+vtkIOParallelXML-8.0-gd.lib<br>
+vtkIOPLY-8.0-gd.lib<br>
+vtkIOSQL-8.0-gd.lib<br>
+vtkIOTecplotTable-8.0-gd.lib<br>
+vtkIOVideo-8.0-gd.lib<br>
+vtkIOXML-8.0-gd.lib<br>
+vtkIOXMLParser-8.0-gd.lib<br>
+vtkjpeg-8.0-gd.lib<br>
+vtkjsoncpp-8.0-gd.lib<br>
+vtklibharu-8.0-gd.lib<br>
+vtklibxml2-8.0-gd.lib<br>
+vtklz4-8.0-gd.lib<br>
+vtkmetaio-8.0-gd.lib<br>
+vtkNetCDF-8.0-gd.lib<br>
+vtkoggtheora-8.0-gd.lib<br>
+vtkParallelCore-8.0-gd.lib<br>
+vtkpng-8.0-gd.lib<br>
+vtkproj4-8.0-gd.lib<br>
+vtkRenderingAnnotation-8.0-gd.lib<br>
+vtkRenderingContext2D-8.0-gd.lib<br>
+vtkRenderingContextOpenGL-8.0-gd.lib<br>
+vtkRenderingCore-8.0-gd.lib<br>
+vtkRenderingFreeType-8.0-gd.lib<br>
+vtkRenderingGL2PS-8.0-gd.lib<br>
+vtkRenderingImage-8.0-gd.lib<br>
+vtkRenderingLabel-8.0-gd.lib<br>
+vtkRenderingLIC-8.0-gd.lib<br>
+vtkRenderingLOD-8.0-gd.lib<br>
+vtkRenderingOpenGL-8.0-gd.lib<br>
+vtkRenderingVolume-8.0-gd.lib<br>
+vtkRenderingVolumeOpenGL-8.0-gd.lib<br>
+vtksqlite-8.0-gd.lib<br>
+vtksys-8.0-gd.lib<br>
+vtktiff-8.0-gd.lib<br>
+vtkverdict-8.0-gd.lib<br>
+vtkViewsContext2D-8.0-gd.lib<br>
+vtkViewsCore-8.0-gd.lib<br>
+vtkViewsInfovis-8.0-gd.lib<br>
+vtkzlib-8.0-gd.lib<br>
+opengl32.lib</p>
+<h2 class="mume-header" id="4-setup-project-for-yaml-cpp">4. Setup project for yaml-cpp:</h2>
+
+<p><strong>properties -&gt; VC++ Directoreis -&gt; Include Directories:</strong><br>
+C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src\inc</p>
+<p><strong>properties -&gt; VC++ Directoreis -&gt; Libaray Directories:</strong><br>
+C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src\lib</p>
+<p><strong>properties -&gt; Linker -&gt; Input -&gt; Additional Dependencies:</strong><br>
+For Debug: yaml-cpp_debug.lib<br>
+For Release: yaml-cpp.lib</p>
+<h2 class="mume-header" id="5-some-quirks">5. Some Quirks:</h2>
+
+<p>error: undefined type <code>pop_t</code> in FLANN&apos;s dist.h:</p>
+<ul>
+<li>move <code>typedef unsigned long long pop_t</code> outside <code>#if</code> <strong>OR</strong> add <code>typedef unsigned long long pop_t</code> in fornt of<br>
+<code>HammingLUT lut</code>(Line 520).</li>
+</ul>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

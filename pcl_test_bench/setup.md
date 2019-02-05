@@ -1,5 +1,5 @@
-# Installation Guide
-Environment:  
+# PCL Installation Guide
+## Environment:  
 Windows 10 + Visual Studio 2017  + PCL 1.8.1-AllInOne  
 
 ## 1. Download PCL all in one and pdb files
@@ -7,7 +7,7 @@ From https://github.com/PointCloudLibrary/pcl/releases and install.
 Copy pdb files to C:\Program Files\PCL 1.8.1\bin.  
 
 ## 2. Setup environment variable
-add to system path:  
+Add to system environment path:  
 %PCL_ROOT%\bin;
 %PCL_ROOT%\3rdParty\FLANN\bin;  
 %PCL_ROOT%\3rdParty\VTK\bin;  
@@ -411,10 +411,10 @@ opengl32.lib
 
 ## 4. Setup project for yaml-cpp:
 __properties -> VC++ Directoreis -> Include Directories:__  
-C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\inc\  
+C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src\inc
 
 __properties -> VC++ Directoreis -> Libaray Directories:__  
-C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\lib  
+C:\Users\jinyao\Documents\GitHub\pcl_test_bench\pcl_test_bench\src\lib  
 
 __properties -> Linker -> Input -> Additional Dependencies:__  
 For Debug: yaml-cpp_debug.lib  
@@ -422,7 +422,7 @@ For Release: yaml-cpp.lib
 
 ## 5. Some Quirks:
 error: undefined type `pop_t` in FLANN's dist.h:  
-move `typedef unsigned long long pop_t` outside `#if` __OR__ add `typedef unsigned long long pop_t` in fornt of 
+- move `typedef unsigned long long pop_t` outside `#if` __OR__ add `typedef unsigned long long pop_t` in fornt of 
 `HammingLUT lut`(Line 520).
 
 
