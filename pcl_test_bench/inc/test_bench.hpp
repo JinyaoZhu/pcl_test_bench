@@ -495,9 +495,18 @@ private:
 			<< "tgt_points" << ","
 			<< "fitness" << ","
 			<< "file_path" << ","
+			<< "tx" << ","
+			<< "ty" << ","
+			<< "tz" << ","
+			<< "qx" << ","
+			<< "qy" << ","
+			<< "qz" << ","
+			<< "qw" << ","
 			<< std::endl;
 		int idx = 1;
 		for (auto &result : results) {
+			Eigen::Vector3f t = result.final_transformation.block<3, 1>(0, 3);
+		    Eigen::Quaternionf q(result.final_transformation.block<3, 3>(0, 0));
 			result_file << "transformation_" + std::to_string(idx++) << ",";
 			result_file.precision(6);
 			result_file
@@ -513,6 +522,13 @@ private:
 				<< result.point_size_tgt << ","
 				<< result.fitness << ","
 				<< result.pcd_file << ","
+				<< t.x() << ","
+				<< t.y() << ","
+				<< t.z() << ","
+				<< q.x() << ","
+				<< q.y() << ","
+				<< q.z() << ","
+				<< q.w() << ","
 				<< std::endl;
 		}
 		result_file.close();

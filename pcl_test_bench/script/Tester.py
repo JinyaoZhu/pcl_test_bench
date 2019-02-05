@@ -13,7 +13,7 @@ class Tester:
         self.result_csv = np.genfromtxt(path, dtype="U20,f,f,f,f,f,f,U5,f,i,i,f,U20", 
             skip_header = 2, delimiter=',',names=[
             'trans_name','error_yaw','error_pitch','error_roll','error_x','error_y','error_z',
-            'converge','time_cost','src_points','tgt_points','fitness','file_path',
+            'converge','time_cost','src_points','tgt_points','fitness','file_path'
         ])
         data = self.result_csv
         self.index = np.arange(1,data['trans_name'].size+1, dtype="i")
