@@ -1,4 +1,0 @@
-max_iter: 50
-step_size: 0.1
-resolution: 2.0
-eps: 0.01

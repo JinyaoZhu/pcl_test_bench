@@ -308,9 +308,9 @@ private:
 	Eigen::Vector3f rot2EulerZYX(Eigen::Matrix3f rot)
 	{
 		Eigen::Vector3f euler;
-		euler(0) = asin(rot(0, 2));
-		euler(1) = asin(rot(1, 2) / cos(euler(1)));
-		euler(2) = asin(rot(0, 1) / cos(euler(1)));
+		euler(0) = asin(rot(2, 0));
+		euler(1) = asin(rot(2, 1) / cos(euler(1)));
+		euler(2) = asin(rot(1, 0) / cos(euler(1)));
 		return euler;
 	}
 
