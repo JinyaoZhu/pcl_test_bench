@@ -1,0 +1,41 @@
+input file: pcd_sample/room_scan2.pcd
+max_translation_x(m): 0.5
+max_translation_y(m): 0.5
+max_translation_z(m): 0.5
+max_rotation_yaw(deg): 90
+max_rotation_pitch(deg): 10
+max_rotation_roll(deg): 10
+Add noise: true
+noise_std(m): 0.05
+output_file:
+  - ted/ref/trans_0.pcd
+  - ted/ref/trans_1.pcd
+  - ted/ref/trans_2.pcd
+  - ted/ref/trans_3.pcd
+  - ted/ref/trans_4.pcd
+  - ted/ref/trans_5.pcd
+  - ted/ref/trans_6.pcd
+  - ted/ref/trans_7.pcd
+  - ted/ref/trans_8.pcd
+  - ted/ref/trans_9.pcd
+  - ted/ref/trans_10.pcd
+  - ted/ref/trans_11.pcd
+  - ted/ref/trans_12.pcd
+  - ted/ref/trans_13.pcd
+  - ted/ref/trans_14.pcd
+  - ted/ref/trans_15.pcd
+  - ted/ref/trans_16.pcd
+  - ted/ref/trans_17.pcd
+  - ted/ref/trans_18.pcd
+  - ted/ref/trans_19.pcd
+  - ted/ref/trans_20.pcd
+  - ted/ref/trans_21.pcd
+  - ted/ref/trans_22.pcd
+  - ted/ref/trans_23.pcd
+  - ted/ref/trans_24.pcd
+  - ted/ref/trans_25.pcd
+  - ted/ref/trans_26.pcd
+  - ted/ref/trans_27.pcd
+  - ted/ref/trans_28.pcd
+  - ted/ref/trans_29.pcd
+  - ted/ref/trans_30.pcd

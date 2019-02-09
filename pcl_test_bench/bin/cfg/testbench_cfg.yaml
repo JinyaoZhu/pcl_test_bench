@@ -1,0 +1,168 @@
+# Leaf size for grid filter
+grid_filter_leafsize: 0.5
+
+scp_cfg_path: cfg/scp_cfg.yaml
+icp_cfg_path: cfg/icp_cfg.yaml
+icpnl_cfg_path: cfg/icpnl_cfg.yaml
+gicp_cfg_path: cfg/gicp_cfg.yaml
+ndt_cfg_path: cfg/ndt_cfg.yaml
+
+# If using exact referencen transformation to computing error
+has_ref_transformation: true
+# has_ref_transformation: false
+
+# Path to the reference transformations
+# ref_trans_path: ted/ref/ref_trans.yaml
+# ref_trans_path: ted/ref_office_keypoints/ref_trans.yaml
+ref_trans_path: ted/ref_room_scan/ref_trans.yaml
+
+# Result output path
+result_output_path_root: tad/
+
+# Path of the input pcd files, the first one will be used as target point cloud
+# all the other are source point clouds that will be algined to the target
+
+# pcd_files_path:
+#   - ted/ref_office_keypoints/trans_0.pcd
+#   - ted/ref_office_keypoints/trans_1.pcd
+
+# pcd_files_path: 
+#              - pcd_sample/room_scan1.pcd  #target point cloud
+#              - pcd_sample/room_scan2.pcd
+
+pcd_files_path: 
+             - ted/ref_room_scan/trans_0.pcd  #target point cloud = room_scan2.pcd
+             - ted/ref_room_scan/trans_1.pcd
+             - ted/ref_room_scan/trans_2.pcd
+             - ted/ref_room_scan/trans_3.pcd
+             - ted/ref_room_scan/trans_4.pcd
+             - ted/ref_room_scan/trans_5.pcd
+             - ted/ref_room_scan/trans_6.pcd
+             - ted/ref_room_scan/trans_7.pcd
+             - ted/ref_room_scan/trans_8.pcd
+             - ted/ref_room_scan/trans_9.pcd
+             - ted/ref_room_scan/trans_10.pcd
+             - ted/ref_room_scan/trans_11.pcd
+             - ted/ref_room_scan/trans_12.pcd
+             - ted/ref_room_scan/trans_13.pcd
+             - ted/ref_room_scan/trans_14.pcd
+             - ted/ref_room_scan/trans_15.pcd
+             - ted/ref_room_scan/trans_16.pcd
+             - ted/ref_room_scan/trans_17.pcd
+             - ted/ref_room_scan/trans_18.pcd
+             - ted/ref_room_scan/trans_18.pcd
+             - ted/ref_room_scan/trans_20.pcd
+             - ted/ref_room_scan/trans_21.pcd
+             - ted/ref_room_scan/trans_22.pcd
+             - ted/ref_room_scan/trans_23.pcd
+             - ted/ref_room_scan/trans_24.pcd
+             - ted/ref_room_scan/trans_25.pcd
+             - ted/ref_room_scan/trans_26.pcd
+             - ted/ref_room_scan/trans_27.pcd
+             - ted/ref_room_scan/trans_28.pcd
+             - ted/ref_room_scan/trans_29.pcd
+             - ted/ref_room_scan/trans_30.pcd
+
+
+# pcd_files_path:
+#   - ted/ref/trans_0.pcd
+#   - ted/ref/trans_1.pcd
+#   - ted/ref/trans_2.pcd
+#   - ted/ref/trans_3.pcd
+#   - ted/ref/trans_4.pcd
+#   - ted/ref/trans_5.pcd
+#   - ted/ref/trans_6.pcd
+#   - ted/ref/trans_7.pcd
+#   - ted/ref/trans_8.pcd
+#   - ted/ref/trans_9.pcd
+#   - ted/ref/trans_10.pcd
+#   - ted/ref/trans_11.pcd
+#   - ted/ref/trans_12.pcd
+#   - ted/ref/trans_13.pcd
+#   - ted/ref/trans_14.pcd
+#   - ted/ref/trans_15.pcd
+#   - ted/ref/trans_16.pcd
+#   - ted/ref/trans_17.pcd
+#   - ted/ref/trans_18.pcd
+#   - ted/ref/trans_19.pcd
+#   - ted/ref/trans_20.pcd
+#   - ted/ref/trans_21.pcd
+#   - ted/ref/trans_22.pcd
+#   - ted/ref/trans_23.pcd
+#   - ted/ref/trans_24.pcd
+#   - ted/ref/trans_25.pcd
+#   - ted/ref/trans_26.pcd
+#   - ted/ref/trans_27.pcd
+#   - ted/ref/trans_28.pcd
+#   - ted/ref/trans_29.pcd
+#   - ted/ref/trans_30.pcd
+#   - ted/ref/trans_31.pcd
+#   - ted/ref/trans_32.pcd
+#   - ted/ref/trans_33.pcd
+#   - ted/ref/trans_34.pcd
+#   - ted/ref/trans_35.pcd
+#   - ted/ref/trans_36.pcd
+#   - ted/ref/trans_37.pcd
+#   - ted/ref/trans_38.pcd
+#   - ted/ref/trans_39.pcd
+#   - ted/ref/trans_40.pcd
+#   - ted/ref/trans_41.pcd
+#   - ted/ref/trans_42.pcd
+#   - ted/ref/trans_43.pcd
+#   - ted/ref/trans_44.pcd
+#   - ted/ref/trans_45.pcd
+#   - ted/ref/trans_46.pcd
+#   - ted/ref/trans_47.pcd
+#   - ted/ref/trans_48.pcd
+#   - ted/ref/trans_49.pcd
+#   - ted/ref/trans_50.pcd
+#   - ted/ref/trans_51.pcd
+#   - ted/ref/trans_52.pcd
+#   - ted/ref/trans_53.pcd
+#   - ted/ref/trans_54.pcd
+#   - ted/ref/trans_55.pcd
+#   - ted/ref/trans_56.pcd
+#   - ted/ref/trans_57.pcd
+#   - ted/ref/trans_58.pcd
+#   - ted/ref/trans_59.pcd
+#   - ted/ref/trans_60.pcd
+#   - ted/ref/trans_61.pcd
+#   - ted/ref/trans_62.pcd
+#   - ted/ref/trans_63.pcd
+#   - ted/ref/trans_64.pcd
+#   - ted/ref/trans_65.pcd
+#   - ted/ref/trans_66.pcd
+#   - ted/ref/trans_67.pcd
+#   - ted/ref/trans_68.pcd
+#   - ted/ref/trans_69.pcd
+#   - ted/ref/trans_70.pcd
+#   - ted/ref/trans_71.pcd
+#   - ted/ref/trans_72.pcd
+#   - ted/ref/trans_73.pcd
+#   - ted/ref/trans_74.pcd
+#   - ted/ref/trans_75.pcd
+#   - ted/ref/trans_76.pcd
+#   - ted/ref/trans_77.pcd
+#   - ted/ref/trans_78.pcd
+#   - ted/ref/trans_79.pcd
+#   - ted/ref/trans_80.pcd
+#   - ted/ref/trans_81.pcd
+#   - ted/ref/trans_82.pcd
+#   - ted/ref/trans_83.pcd
+#   - ted/ref/trans_84.pcd
+#   - ted/ref/trans_85.pcd
+#   - ted/ref/trans_86.pcd
+#   - ted/ref/trans_87.pcd
+#   - ted/ref/trans_88.pcd
+#   - ted/ref/trans_89.pcd
+#   - ted/ref/trans_90.pcd
+#   - ted/ref/trans_91.pcd
+#   - ted/ref/trans_92.pcd
+#   - ted/ref/trans_93.pcd
+#   - ted/ref/trans_94.pcd
+#   - ted/ref/trans_95.pcd
+#   - ted/ref/trans_96.pcd
+#   - ted/ref/trans_97.pcd
+#   - ted/ref/trans_98.pcd
+#   - ted/ref/trans_99.pcd
+#   - ted/ref/trans_100.pcd

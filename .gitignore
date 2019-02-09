@@ -6,9 +6,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-pcl_test_bench/ref/
-pcl_test_bench/res/
-pcl_test_bench/ted/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -21,7 +18,7 @@ pcl_test_bench/ted/
 x64/
 x86/
 bld/
-[Bb]in/
+# [Bb]in/
 [Oo]bj/
 [Ll]og/
 

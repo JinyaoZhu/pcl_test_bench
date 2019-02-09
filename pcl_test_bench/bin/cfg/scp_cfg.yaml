@@ -1,0 +1,17 @@
+
+norm_est_radius_search: 2.0
+fpfh_est_radius_search: 2.5
+
+# Euclidian distance for inlier thresholding ~2.5x leaf size
+scp_max_corr_distance: 1.25
+# Maximum iterations number in RANSAC
+scp_max_iter: 5000
+# Similarity threshold for prerejector
+scp_sim_threshold: 0.9
+# Random sample first k nearest correspondences
+scp_corr_randomness: 5
+# Minimum inlier fraction
+scp_inlier_fraction: 0.30
+# Number of sample using for transformation estimation
+scp_number_of_samples: 3
+
