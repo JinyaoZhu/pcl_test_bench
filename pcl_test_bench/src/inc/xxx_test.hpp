@@ -1,8 +1,10 @@
 /**
  * A template for Tester
- * - change the class name as you wish
- * - change alg_name
- * - fill the fucntions
+ * 1. change the class name (line 19)
+ * 2. change alg_name (line 25)
+ * 3. change config file path's name (line 36)
+ * 4. fill the fucntions (line 39, 45, 51)
+ * 5. initialize the class in main.cpp and run testbench
  */
 #pragma once
 #include <iostream>
@@ -29,6 +31,8 @@ class TemplateTest : public TestBench<PointType>
     {
         YAML::Node alg_cfg;
         TestBench<PointType>::reg_candidate_name = alg_name;
+        /* change the name of the parameter for the config file path, 
+        don't forget add path of the config in testbench_cfg.yaml */
         std::string path = TestBench<PointType>::cfg_file["xxx_cfg_path"].as<std::string>();
         alg_cfg = YAML::LoadFile(path);
 

@@ -1,8 +1,8 @@
 from Tester import Tester
 from Benchmark import Benchmark
 
-# tester_names = ['SCP']
-# tester_result_paths = ['../tad/SCP/resultError.csv']
+tester_names = ['SCP']
+tester_result_paths = ['../tad/SCP/resultError.csv']
 
 # tester_names = ['SCP','ICP']
 # tester_result_paths = ['../tad/SCP/resultError.csv',
@@ -10,13 +10,13 @@ from Benchmark import Benchmark
 #                       ]
 
 # given names of the testers
-tester_names = ['SCP','ICP','ICPNL','GICP','NDT']
-# csv files path of each tester
-tester_result_paths = ['../tad/SCP/resultError.csv',
-                        '../tad/ICP/resultError.csv',
-                        '../tad/ICPNL/resultError.csv',
-                        '../tad/GICP/resultError.csv',
-                        '../tad/NDT/resultError.csv']
+# tester_names = ['SCP','ICP','ICPNL','GICP','NDT']
+# # csv files path of each tester
+# tester_result_paths = ['../tad/SCP/resultError.csv',
+#                         '../tad/ICP/resultError.csv',
+#                         '../tad/ICPNL/resultError.csv',
+#                         '../tad/GICP/resultError.csv',
+#                         '../tad/NDT/resultError.csv']
 
 # # given names of the testers
 # tester_names = ['1000','3000','5000','7000','10000']
@@ -61,3 +61,6 @@ if(len(tester_names) > 1):
     benchmark.plotRotBM()
     benchmark.plotTransBM()
     benchmark.plotTimeCostBM()
+print('Finished!')
+input("Press Enter to continue ...")
+exit()

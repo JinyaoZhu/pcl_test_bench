@@ -11,6 +11,7 @@
 #include <gicp_test.hpp>
 #include <ndt_test.hpp>
 
+// point type used for the testbench
 typedef pcl::PointXYZ PointType;
 
 // simple point cloud viewer
@@ -89,6 +90,10 @@ int main(int argc, char **argv)
 		std::cout << "[4] Run Test Bench: ICP NL.\n";
 		std::cout << "[5] Run Test Bench: GICP.\n";
 		std::cout << "[6] Run Test Bench: NDT.\n";
+		/* ======== add new algorithm fowlloing the strcture ========*/
+		/*
+		std::cout << "[7] Run Test Bench: XXX.\n";
+		*/
 		std::cout << "[q] Quit.\n";
 		std::cout << "Your input: ";
 		std::cin >> user_input;
@@ -124,6 +129,14 @@ int main(int argc, char **argv)
 			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
 			test_bench.runTestBench();
 		}
+		/*======== add new algorithm following the structure ========*/
+		/*
+		else if (user_input == "7") {
+			xxxTest<PointType> test_bench = xxxTest<PointType>();
+			test_bench.loadTestBenchConfig("cfg/testbench_cfg.yaml");
+			test_bench.runTestBench();
+		}
+		*/
 		else if (user_input == "q") {
 			is_finished = true;
 		}

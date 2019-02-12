@@ -218,16 +218,19 @@ code.language-yaml {
 <p>Windows 10 64bit + Visual Studio 2017  + PCL 1.8.1-AllInOne</p>
 <h2 class="mume-header" id="1-download-pcl-all-in-one-and-pdb-files">1. Download PCL all in one and pdb files</h2>
 
-<p>From <a href="https://github.com/PointCloudLibrary/pcl/releases">https://github.com/PointCloudLibrary/pcl/releases</a> and install(using default path).<br>
-Copy pdb files to C:\Program Files\PCL 1.8.1\bin.</p>
+<p>From <a href="https://github.com/PointCloudLibrary/pcl/releases">https://github.com/PointCloudLibrary/pcl/releases</a> download:<br>
+<strong>PCL-1.8.1-AllInOne-msvc2017-win64.exe</strong><br>
+<strong>pcl-1.8.1-pdb-msvc2017-win64.zip</strong><br>
+Install PCL-1.8.1-AllInOne-msvc2017-win64.exe(using default path).<br>
+Unzip pcl-1.8.1-pdb-msvc2017-win64.zip and copy the pdb files to C:\Program Files\PCL 1.8.1\bin.</p>
 <h2 class="mume-header" id="2-setup-environment-variable">2. Setup environment variable</h2>
 
-<p>Add to system environment path:<br>
-%PCL_ROOT%\bin;<br>
-%PCL_ROOT%\3rdParty\FLANN\bin;<br>
-%PCL_ROOT%\3rdParty\VTK\bin;<br>
-%PCL_ROOT%\Qhull\bin;<br>
-C:\Program Files\OpenNI2\Tools</p>
+<p>Add follows to system environment path:<br>
+<strong>%PCL_ROOT%\bin;</strong><br>
+<strong>%PCL_ROOT%\3rdParty\FLANN\bin;</strong><br>
+<strong>%PCL_ROOT%\3rdParty\VTK\bin;</strong><br>
+<strong>%PCL_ROOT%\Qhull\bin;</strong><br>
+<strong>C:\Program Files\OpenNI2\Tools</strong></p>
 <p><strong>Reboot !!!</strong></p>
 <h2 class="mume-header" id="3-setup-vs-project-for-pcl-libaray">3. Setup VS project for PCL Libaray</h2>
 
