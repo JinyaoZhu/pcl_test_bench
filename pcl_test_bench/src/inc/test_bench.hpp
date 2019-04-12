@@ -1,7 +1,7 @@
 /**
  * Test Bench framework for PCL registration algorithm
  * Author: J.Zhu
- * Date: 2017.1.7
+ * Date: 2019.1.7
  */
 #pragma once
 #include <iostream>
