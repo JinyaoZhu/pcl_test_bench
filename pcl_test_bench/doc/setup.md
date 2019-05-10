@@ -3,17 +3,17 @@
 Windows 10 64bit + Visual Studio 2017  + PCL 1.8.1-AllInOne  
 
 ## 1. Download PCL all in one and pdb files
-From https://github.com/PointCloudLibrary/pcl/releases download:
-**PCL-1.8.1-AllInOne-msvc2017-win64.exe**
-**pcl-1.8.1-pdb-msvc2017-win64.zip**
+From https://github.com/PointCloudLibrary/pcl/releases download:  
+**PCL-1.8.1-AllInOne-msvc2017-win64.exe**  
+**pcl-1.8.1-pdb-msvc2017-win64.zip**  
 Install PCL-1.8.1-AllInOne-msvc2017-win64.exe(using default path).  
 Unzip pcl-1.8.1-pdb-msvc2017-win64.zip and copy the pdb files to C:\Program Files\PCL 1.8.1\bin.  
 
 ## 2. Setup environment variable
 Add follows to system environment path:  
-**%PCL_ROOT%\bin;**
-**%PCL_ROOT%\3rdParty\FLANN\bin;**  
-**%PCL_ROOT%\3rdParty\VTK\bin;**  
+**%PCL_ROOT%\bin;**  
+**%PCL_ROOT%\3rdParty\FLANN\bin;**    
+**%PCL_ROOT%\3rdParty\VTK\bin;**   
 **%PCL_ROOT%\Qhull\bin;**  
 **C:\Program Files\OpenNI2\Tools**  
 
